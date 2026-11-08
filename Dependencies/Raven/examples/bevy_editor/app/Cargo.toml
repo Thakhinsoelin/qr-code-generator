@@ -1,0 +1,15 @@
+[package]
+name = "raven-bevy-editor"
+version = "0.1.0"
+edition = "2021"
+description = "A visual editor of Bevy scenes: the interface is Raven (editor.xml), the scene is drawn by Bevy"
+
+[[bin]]
+name = "raven-bevy-editor"
+path = "src/main.rs"
+
+[dependencies]
+editor_core = { path = "../core" }
+editor_ui = { path = "../ui" }
+# no window of its own: Bevy draws into a picture that the Raven viewport shows
+bevy = "0.16"

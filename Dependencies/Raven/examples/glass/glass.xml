@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Raven example - glass.xml
+
+  The glass themes (R_THEME_GLASS_DARK / R_THEME_GLASS_LIGHT) turn every
+  control into glass. Material="..." says what one widget is made of, and
+  there are three kinds of glass, from the lightest to the heaviest:
+
+    Glass          clear: what is behind shows through, bent at the rim
+    FrostedGlass   blurred: the colors behind, without their shapes
+    TintedGlass    blurred and colored by the theme: the easiest to read on
+
+  Here a side bar (frosted), a tool bar (tinted) and a player bar (clear)
+  float in an Overlay above a page that scrolls under them.
+
+  Appear="..." makes a widget arrive with a transition when the window opens:
+  the bars fly in from the edges, the title rises, and the cards (built in
+  main.c) pop one after the other.
+-->
+<Window Title="Raven - glass" Width="1100" Height="720" MinWidth="820" MinHeight="560">
+	<Overlay>
+
+		<!-- the page: it scrolls under everything else -->
+		<ScrollBox Name="page">
+			<VBox Spacing="18" Slot.Padding="304,92,28,120">
+				<Label TextSize="36" Appear="FlyUp" AppearDelay="0.1">Good evening</Label>
+				<Label Wrap="true" Opacity="0.75" Appear="FlyUp" AppearDelay="0.18">Everything that floats on this page is glass: it blurs and bends what scrolls behind it, picks up its colors and catches the light on its rim. Scroll, or drag a slider and watch its knob turn into a lens.</Label>
+				<UniformGrid Name="cards" Columns="3" MinCellSize="200,150" Spacing="16"/>
+				<Label TextSize="22" Slot.Padding="0,10,0,0">Controls</Label>
+				<WrapBox Spacing="10">
+					<Button Text="Glass"/>
+					<Button Text="Tinted" Style="Primary"/>
+					<Button Text="Disabled" Enabled="false"/>
+					<ComboBox Selected="1"><Item Text="Lossless"/><Item Text="High quality"/><Item Text="Data saver"/></ComboBox>
+					<TextInput Placeholder="Type here" Width="180"/>
+					<SpinBox Min="0" Max="10" Value="4" Decimals="0" Width="90"/>
+				</WrapBox>
+				<HBox Spacing="22">
+					<Checkbox Text="Check" Checked="true"/>
+					<Checkbox Text="Radio" Style="Radio" Checked="true"/>
+					<Checkbox Text="Switch" Style="Switch" Checked="true"/>
+					<Checkbox Text="Off" Style="Switch"/>
+				</HBox>
+				<ProgressBar Name="progress" Value="0.4" Slot.MaxSize="420" Slot.HAlign="Left" Width="420"/>
+			</VBox>
+		</ScrollBox>
+
+		<!-- side bar -->
+		<Border Material="FrostedGlass" CornerRadius="28" Padding="16" Width="264" Shadow="28"
+			Slot.HAlign="Left" Slot.Padding="18,18,0,18" Appear="FlyRight">
+			<VBox Spacing="12">
+				<Label TextSize="22">Library</Label>
+				<TextInput Placeholder="Search"/>
+				<TreeView Name="library" Slot.Fill="1">
+					<Item Text="Listen now"/>
+					<Item Text="Browse"/>
+					<Item Text="Playlists" Expanded="true">
+						<Item Text="Favourites"/>
+						<Item Text="Focus"/>
+						<Item Text="Late night"/>
+					</Item>
+					<Item Text="Artists"/>
+					<Item Text="Albums"/>
+				</TreeView>
+				<Separator/>
+				<HBox>
+					<Label Slot.Fill="1" Slot.VAlign="Center">Dark glass</Label>
+					<Checkbox Name="dark" Style="Switch" Checked="true" OnChanged="theme.toggle"/>
+				</HBox>
+				<HBox>
+					<Label Slot.Fill="1" Slot.VAlign="Center">Crossfade</Label>
+					<Checkbox Style="Switch"/>
+				</HBox>
+				<Label Opacity="0.7">Volume</Label>
+				<Slider Name="volume" Value="0.62"/>
+			</VBox>
+		</Border>
+
+		<!-- tool bar -->
+		<Border Material="TintedGlass" CornerRadius="100" Padding="6" Shadow="24"
+			Slot.HAlign="Center" Slot.VAlign="Top" Slot.Padding="286,18,0,0" Appear="Drop" AppearDelay="0.25">
+			<HBox Spacing="4">
+				<Button Text="Today" Style="Flat"/>
+				<Button Text="Library" Style="Flat"/>
+				<Button Text="Radio" Style="Flat"/>
+				<Button Name="menu" Text="More" Style="Flat" OnClicked="menu.open"/>
+				<Button Text="Share" Style="Primary"/>
+			</HBox>
+		</Border>
+
+		<!-- player bar -->
+		<Border Material="Glass" CornerRadius="100" Padding="10,8" Shadow="30"
+			Slot.HAlign="Center" Slot.VAlign="Bottom" Slot.Padding="286,0,0,22" Appear="FlyUp" AppearDelay="0.35">
+			<HBox Spacing="12">
+				<Button Text="Previous" Style="Flat"/>
+				<Button Name="play" Text="Pause" Style="Primary" MinWidth="76" OnClicked="player.toggle"/>
+				<Button Text="Next" Style="Flat"/>
+				<Slider Name="position" Width="240" Slot.VAlign="Center" Value="0.35"/>
+				<Label Name="time" Slot.VAlign="Center" Opacity="0.7" MinWidth="40">1:24</Label>
+			</HBox>
+		</Border>
+	</Overlay>
+</Window>

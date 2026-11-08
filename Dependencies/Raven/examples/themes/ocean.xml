@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  A theme file. It starts from a built-in theme (Base) and changes what it
+  wants: the accent (and the shades that follow from it), colors, metrics,
+  the look of glass, the colors of code, and styles: values for one type of
+  widget, for a class, or for both.
+
+  The example watches this file: edit a value, save, look at the window.
+-->
+<Theme Name="Ocean" Base="Dark" Accent="#22D3EE" CornerRadius="10">
+	<Colors Window="#0B1220" Panel="#111A2C" Popup="#16213A" Header="#16213A" Input="#0A1020" Text="#DCE7F5" Separator="#FFFFFF1A"/>
+	<Metrics ControlHeight="32" Spacing="8"/>
+	<Syntax Keyword="#7DD3FC" String="#86EFAC" Comment="#64748B" Heading="#22D3EE"/>
+
+	<!-- every button is a capsule -->
+	<Style Widget="Button" CornerRadius="16"/>
+	<!-- widgets of the class "danger", whatever they are -->
+	<Style Class="danger" Accent="#FB7185" AccentHovered="#FDA4AF" AccentPressed="#E11D48"/>
+	<!-- widgets of the class "card": a lighter panel with large corners -->
+	<Style Class="card" Panel="#1B2742" CornerRadius="18"/>
+	<!-- labels of the class "eyebrow": small capitals above a title -->
+	<Style Widget="Label" Class="eyebrow" Text="#22D3EE" FontSize="12"/>
+</Theme>

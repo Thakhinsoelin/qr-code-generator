@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Raven example - overlay
+
+  A window that is seen through: Transparent="true" asks the window system
+  for it, Backdrop says what the system does to what shows through. Nothing
+  is drawn where there is no widget: the desktop is there.
+
+  The panels are BackgroundBlur widgets. "Native" opens a hole in the window
+  and lets the system blur the desktop behind it (when it can); the three
+  others blur what Raven itself drew behind them.
+-->
+<Window Title="Raven - overlay" Width="640" Height="420" Transparent="true" Backdrop="Blur" Borderless="true">
+	<BackgroundBlur Name="panel" Style="Native" CornerRadius="24" Padding="22" Tint="#10141C99" Shadow="0" WindowDrag="true">
+		<VBox Spacing="12">
+			<HBox Spacing="10">
+				<Label Text="Seen through" TextSize="24" Slot.Fill="1" Color="#FFFFFF"/>
+				<Button Text="Close" Style="Flat" OnClicked="overlay.close" Slot.VAlign="Center"/>
+			</HBox>
+			<Label Name="what" Wrap="true" Color="#FFFFFFC0" Text=""/>
+
+			<HBox Spacing="10">
+				<Label Text="Backdrop" Width="80" Slot.VAlign="Center" Color="#FFFFFFC0"/>
+				<ComboBox Name="backdrop" Items="Transparent|Blur|Acrylic|Mica" Selected="1" Width="160" OnChanged="overlay.backdrop"/>
+				<Label Name="backdrop.result" Text="" Slot.VAlign="Center" Color="#FFFFFF90"/>
+			</HBox>
+			<HBox Spacing="10">
+				<Label Text="Opacity" Width="80" Slot.VAlign="Center" Color="#FFFFFFC0"/>
+				<Slider Name="opacity" Min="0.2" Max="1" Value="1" Width="160" OnChanged="overlay.opacity" Slot.VAlign="Center"/>
+				<Label Text="of the whole window" Slot.VAlign="Center" Color="#FFFFFF90"/>
+			</HBox>
+
+			<!-- the four ways to blur, over stripes drawn by the application -->
+			<Overlay Slot.Fill="1">
+				<HBox Name="stripes" Clip="true"/>
+				<HBox Spacing="12" Slot.Padding="14">
+					<BackgroundBlur Style="Plain" Slot.Fill="1" CornerRadius="14" Padding="10"><Label Text="Plain" Color="#FFFFFF" TextAlign="Center" Slot.VAlign="Center"/></BackgroundBlur>
+					<BackgroundBlur Style="Frosted" Slot.Fill="1" CornerRadius="14" Padding="10"><Label Text="Frosted" Color="#FFFFFF" TextAlign="Center" Slot.VAlign="Center"/></BackgroundBlur>
+					<BackgroundBlur Style="Glass" Slot.Fill="1" CornerRadius="14" Padding="10"><Label Text="Glass" Color="#FFFFFF" TextAlign="Center" Slot.VAlign="Center"/></BackgroundBlur>
+					<BackgroundBlur Style="Native" Slot.Fill="1" CornerRadius="14" Padding="10" Tint="#00000030"><Label Text="Native" Color="#FFFFFF" TextAlign="Center" Slot.VAlign="Center"/></BackgroundBlur>
+				</HBox>
+			</Overlay>
+		</VBox>
+	</BackgroundBlur>
+</Window>

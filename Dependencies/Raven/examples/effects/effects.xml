@@ -1,0 +1,50 @@
+<!-- The effects that come with Raven (raven_shader.h): one card each. -->
+<Window Title="Raven effects" Width="1180" Height="720">
+	<Widget Name="Card" Effect="" Caption="" Color="" Color2="" Params="">
+		<VBox Spacing="8">
+			<Border Effect="{Effect}" CornerRadius="18" Height="190">
+				<Label Text="{Caption}" TextSize="18" Slot.HAlign="Left" Slot.VAlign="Bottom" Slot.Padding="16"/>
+			</Border>
+		</VBox>
+	</Widget>
+	<VBox Spacing="22" Slot.Padding="32">
+		<HBox Spacing="12">
+			<Label Text="Effects" TextSize="28" Slot.Fill="1"/>
+			<Label Text="Border Effect=&quot;...&quot;  -  your own: a .spv written with raven_effect.glsl" Opacity="0.6" Slot.VAlign="Center"/>
+		</HBox>
+		<UniformGrid Columns="4" Spacing="18">
+			<Card Effect="aurora" Caption="aurora"/>
+			<Card Effect="mesh" Caption="mesh"/>
+			<Card Effect="plasma" Caption="plasma"/>
+			<Card Effect="grain" Caption="grain"/>
+			<Card Effect="spotlight" Caption="spotlight"/>
+			<Card Effect="shimmer" Caption="shimmer"/>
+			<Border Effect="neon" CornerRadius="18" Height="190" Background="#16161A">
+				<Label Text="neon" TextSize="18" Slot.HAlign="Left" Slot.VAlign="Bottom" Slot.Padding="16"/>
+			</Border>
+			<Overlay Height="190">
+				<Border CornerRadius="18" Background="#1C1C1E">
+					<VBox Spacing="2" Slot.Padding="14">
+						<Label Text="Rings run over" TextSize="22"/>
+						<Label Text="what is behind," TextSize="22"/>
+						<Label Text="like water." TextSize="22" Color.Text="#64D2FF"/>
+					</VBox>
+				</Border>
+				<Border Effect="ripple" CornerRadius="18" EffectColor="#64D2FF20" EffectParams="1,5,1.4,0.7">
+					<Label Text="ripple" TextSize="18" Slot.HAlign="Left" Slot.VAlign="Bottom" Slot.Padding="16"/>
+				</Border>
+			</Overlay>
+		</UniformGrid>
+		<HBox Spacing="18" Height="150">
+			<Border Effect="wave.spv" EffectColor="#1C1C1E" EffectColor2="#0A84FF" CornerRadius="18" Slot.Fill="1">
+				<Label Text="wave.spv: an effect of the application" TextSize="18" Slot.HAlign="Left" Slot.VAlign="Bottom" Slot.Padding="16"/>
+			</Border>
+			<Overlay Slot.Fill="1">
+				<Border CornerRadius="18" Effect="mesh"/>
+				<Border Effect="liquid.spv" EffectBackdrop="true" EffectColor="#FFFFFF18" EffectParams="8" CornerRadius="18" Slot.Padding="22">
+					<Label Text="liquid.spv: reads what is behind" TextSize="18" Slot.HAlign="Left" Slot.VAlign="Bottom" Slot.Padding="16"/>
+				</Border>
+			</Overlay>
+		</HBox>
+	</VBox>
+</Window>

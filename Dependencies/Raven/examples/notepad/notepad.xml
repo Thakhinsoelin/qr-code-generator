@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Raven example - notepad
+
+  CustomHeader="true" removes the title bar of the system: the HeaderBar below
+  takes its place. It is a widget like the others, so it holds what the
+  application wants (here the menus and the choice of the language); dragging
+  it moves the window, a double click maximizes it, and the edges of the
+  window still resize it.
+-->
+<Window Title="Raven Notepad" Width="980" Height="640" MinWidth="560" MinHeight="320" CustomHeader="true">
+	<VBox>
+		<HeaderBar Name="header">
+			<MenuBar>
+				<Menu Text="File">
+					<MenuItem Text="New" Shortcut="Ctrl+N" OnClicked="file.new"/>
+					<MenuItem Text="Open..." Shortcut="Ctrl+O" OnClicked="file.open"/>
+					<Separator/>
+					<MenuItem Text="Save" Shortcut="Ctrl+S" OnClicked="file.save"/>
+					<MenuItem Text="Save as..." Shortcut="Ctrl+Shift+S" OnClicked="file.save_as"/>
+					<Separator/>
+					<MenuItem Text="Quit" Shortcut="Ctrl+Q" OnClicked="file.quit"/>
+				</Menu>
+				<Menu Text="Edit">
+					<MenuItem Text="Undo" OnClicked="edit.undo"/>
+					<MenuItem Text="Redo" OnClicked="edit.redo"/>
+					<Separator/>
+					<MenuItem Text="Propose words" OnClicked="edit.complete"/>
+					<MenuItem Text="Select all" OnClicked="edit.select_all"/>
+				</Menu>
+				<Menu Text="View">
+					<MenuItem Name="view.numbers" Text="Line numbers" Checkable="true" Checked="true" OnClicked="view.numbers"/>
+					<MenuItem Name="view.wrap" Text="Word wrap" Checkable="true" OnClicked="view.wrap"/>
+					<Separator/>
+					<MenuItem Text="Dark" OnClicked="view.dark"/>
+					<MenuItem Text="Light" OnClicked="view.light"/>
+					<MenuItem Text="Dark glass" OnClicked="view.glass_dark"/>
+					<MenuItem Text="Light glass" OnClicked="view.glass_light"/>
+				</Menu>
+			</MenuBar>
+			<!-- on the right of the bar, before the buttons of the window -->
+			<ComboBox Name="language" Width="130" Slot.HAlign="Right" Slot.VAlign="Center" Slot.Padding="8,0"
+				Metric.ControlHeight="26" OnChanged="view.language" Tooltip="Language of the text"/>
+		</HeaderBar>
+
+		<TextEditor Name="editor" LineNumbers="true" Slot.Fill="1"
+			Placeholder="Type here, open a file (Ctrl+O), or drop one from the file manager."/>
+
+		<Separator/>
+		<HBox Spacing="16" Slot.Padding="10,4">
+			<Label Name="status" Slot.Fill="1" Opacity="0.8"/>
+			<Label Name="notes" Opacity="0.6"/>
+			<Label Name="position" Opacity="0.6"/>
+		</HBox>
+	</VBox>
+</Window>

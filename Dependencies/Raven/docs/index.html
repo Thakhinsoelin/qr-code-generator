@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Raven Homepage</title>
+<meta name="description" content="Raven is an open source, native GUI library in C: lightweight, multithreaded, no dependency, with bindings for C++, Rust, Python, Go, C#, Zig and Lua.">
+<link rel="canonical" href="https://oscar-soirey.github.io/Raven/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Raven">
+<meta property="og:title" content="Raven, an open source GUI library in C">
+<meta property="og:description" content="Raven is an open source, native GUI library in C: lightweight, multithreaded, no dependency, with bindings for C++, Rust, Python, Go, C#, Zig and Lua.">
+<meta property="og:url" content="https://oscar-soirey.github.io/Raven/">
+<meta property="og:image" content="https://oscar-soirey.github.io/Raven/images/studio_glass.png">
+<meta property="og:image:alt" content="Raven, a native GUI library in C: the studio example">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Raven, an open source GUI library in C">
+<meta name="twitter:description" content="Raven is an open source, native GUI library in C: lightweight, multithreaded, no dependency, with bindings for C++, Rust, Python, Go, C#, Zig and Lua.">
+<meta name="twitter:image" content="https://oscar-soirey.github.io/Raven/images/studio_glass.png">
+<meta name="theme-color" content="#e5322d">
+<link rel="icon" type="image/png" href="logo-com-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@500;700&family=JetBrains+Mono:wght@400;600&family=Newsreader:opsz,wght@6..72,400;6..72,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#fcfcfb; --fg:#141414; --muted:#5c5b60; --line:#d6d6da; --card:#fff; --code-bg:#fff;
+  --accent:#e5322d; --accent-fg:#fff; --grid:rgba(60,90,140,.09);
+  --tk-k:#d6336c; --tk-t:#0b7285; --tk-f:#1c7ed6; --tk-s:#2f9e44; --tk-n:#e8590c;
+  --tk-m:#7048e8; --tk-c:#8d8a8c; --tk-g:#c92a2a; --tk-a:#e8590c;
+  --mono:"JetBrains Mono","Fira Code",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --head:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --hand:"Caveat","Segoe Print","Bradley Hand",cursive;
+  --body:"Newsreader",Georgia,"Times New Roman",serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#17161a; --fg:#f2f0ee; --muted:#a8a4a6; --line:#3a373d; --card:#232126; --code-bg:#1f1d22;
+    --accent:#ff5a52; --accent-fg:#1a0b0a; --grid:rgba(255,255,255,.045);
+    --tk-k:#ff7b9c; --tk-t:#4dd0e1; --tk-f:#74b9ff; --tk-s:#8ce99a; --tk-n:#ffa94d;
+    --tk-m:#b197fc; --tk-c:#7d787a; --tk-g:#ff6b6b; --tk-a:#ffa94d;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#17161a; --fg:#f2f0ee; --muted:#a8a4a6; --line:#3a373d; --card:#232126; --code-bg:#1f1d22;
+  --accent:#ff5a52; --accent-fg:#1a0b0a; --grid:rgba(255,255,255,.045);
+  --tk-k:#ff7b9c; --tk-t:#4dd0e1; --tk-f:#74b9ff; --tk-s:#8ce99a; --tk-n:#ffa94d;
+  --tk-m:#b197fc; --tk-c:#7d787a; --tk-g:#ff6b6b; --tk-a:#ffa94d;
+  color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px); scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{
+  margin:0; color:var(--fg); text-align:left; overflow-x:clip;
+  font:18px/1.7 var(--body);
+  background-color:var(--bg);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:28px 28px;
+}
+main{max-width:880px; margin:0; padding:0 clamp(20px,6vw,80px)}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:3px solid var(--accent); outline-offset:3px}
+nav{display:flex; align-items:center; gap:26px; padding:28px 0; flex-wrap:wrap}
+nav .brand{display:flex; align-items:center; gap:10px; margin-right:auto; font:800 24px var(--head); letter-spacing:-.02em; text-decoration:none}
+nav .brand img{height:34px; width:auto; display:block}
+nav a.l{text-decoration:none; font-size:17px}
+nav a.l:hover{text-decoration:underline wavy var(--accent); text-underline-offset:5px}
+header{padding:48px 0 44px}
+.stamp{display:inline-block; font:700 24px/1 var(--hand); color:var(--accent); border:2.5px solid var(--accent); outline:1px solid var(--accent); outline-offset:3px; border-radius:6px 10px 7px 9px; padding:6px 16px 4px; transform:rotate(-3deg); margin:0 0 30px 4px}
+h1{font:800 clamp(40px,8vw,68px)/1.02 var(--head); letter-spacing:-.03em; margin:0 0 22px; max-width:11em}
+header p.lead{font-size:22px; line-height:1.55; color:var(--muted); margin:0 0 34px; max-width:28em}
+.btn{display:inline-block; font:700 17px var(--head); padding:11px 24px; margin:0 14px 14px 0; text-decoration:none; color:var(--accent-fg); background:var(--accent); border:2px solid var(--fg); border-radius:12px 9px 13px 10px; box-shadow:3px 3px 0 var(--fg); transition:transform .12s, box-shadow .12s}
+.btn.alt{background:var(--card); color:var(--fg)}
+.btn:hover{transform:translate(2px,2px); box-shadow:1px 1px 0 var(--fg)}
+section{padding:46px 0}
+h2{font:800 clamp(28px,5vw,36px)/1.1 var(--head); letter-spacing:-.02em; margin:0 0 26px}
+h2::after{content:""; display:block; width:96px; height:8px; margin-top:8px; background:var(--accent);
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 8'%3E%3Cpath d='M0 4Q6 0 12 4T24 4' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x left center/24px 8px;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 8'%3E%3Cpath d='M0 4Q6 0 12 4T24 4' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x left center/24px 8px}
+ul.why{list-style:none; padding:0; margin:0; display:grid; gap:14px}
+ul.why li{display:flex; gap:14px}
+ul.why li::before{content:""; flex:none; width:11px; height:11px; margin-top:.62em; background:var(--accent); border-radius:55% 45% 50% 50%/50% 55% 45% 50%}
+pre{background:var(--code-bg); border:1px solid var(--line); border-left:5px solid var(--accent); border-radius:3px; padding:18px 22px; margin:0; overflow-x:auto; font:400 14px/1.75 var(--mono); tab-size:4}
+code{font-family:var(--mono); font-size:.82em; background:color-mix(in srgb,var(--accent) 14%,transparent); padding:2px 7px; border-radius:4px}
+.k{color:var(--tk-k)} .t{color:var(--tk-t)} .f{color:var(--tk-f)} .s{color:var(--tk-s)}
+.n{color:var(--tk-n)} .m{color:var(--tk-m)} .c{color:var(--tk-c); font-style:italic}
+.g{color:var(--tk-g)} .a{color:var(--tk-a)}
+/* language tabs and copy button */
+.tabs{display:flex; flex-wrap:wrap; gap:8px; margin:0 0 14px}
+.tabs button{font:400 14px var(--mono); background:var(--card); color:var(--fg); border:1.5px solid var(--fg); border-radius:8px 12px 9px 11px; padding:4px 14px; cursor:pointer}
+.tabs button:hover{background:color-mix(in srgb,var(--accent) 14%,var(--card))}
+.tabs button[aria-selected=true]{background:var(--accent); color:var(--accent-fg)}
+.codebox{position:relative}
+.codebox[hidden]{display:none}
+.copy{position:absolute; top:8px; right:8px; font:700 17px/1 var(--hand); color:var(--fg); background:var(--card); border:1.5px solid var(--fg); border-radius:6px 9px 7px 8px; padding:4px 11px 2px; cursor:pointer; opacity:0; transition:opacity .12s}
+.codebox:hover .copy,.copy:focus-visible{opacity:1}
+.copy:hover{background:var(--accent); color:var(--accent-fg)}
+@media (hover:none){.copy{opacity:1}}
+.langs{display:flex; flex-wrap:wrap; gap:10px}
+.langs span{font:400 14px var(--mono); background:var(--card); border:1.5px solid var(--fg); border-radius:8px 12px 9px 11px; padding:3px 13px}
+.langs span:nth-child(odd){transform:rotate(-1.5deg)}
+.langs span:nth-child(even){transform:rotate(1.2deg)}
+.muted{color:var(--muted)}
+.note{font:500 26px/1.15 var(--hand); color:var(--accent); display:inline-block; transform:rotate(-1.5deg); margin:0 0 22px}
+/* prints pinned on the page */
+figure.shot{position:relative; margin:0 0 58px; padding:6px 4px 0}
+figure.shot::before{content:""; position:absolute; z-index:1; top:-8px; left:50%; width:100px; height:28px; margin-left:-50px; background:color-mix(in srgb,var(--accent) 32%,transparent); transform:rotate(-2.5deg)}
+figure.shot img{display:block; width:100%; height:auto; background:var(--card); border:10px solid var(--card); outline:1px solid var(--line); box-shadow:0 14px 26px -12px rgba(0,0,0,.4); transform:rotate(-.9deg)}
+figure.shot:nth-of-type(even) img{transform:rotate(.8deg)}
+figure.shot:last-child{margin-bottom:0}
+figcaption{margin:14px 0 0 8px; font:500 23px/1.2 var(--hand); color:var(--muted)}
+/* comparison */
+.cmp-wrap{overflow-x:auto; border:2px solid var(--fg); border-radius:6px; background:var(--card)}
+table.cmp{border-collapse:collapse; table-layout:fixed; width:100%; min-width:640px; font-size:15px; line-height:1.4}
+table.cmp th, table.cmp td{border:1px solid var(--line); padding:8px 11px; text-align:left; vertical-align:top}
+table.cmp thead th{text-align:center; font:700 17px var(--head)}
+table.cmp thead th:first-child, table.cmp tbody th[scope=row]{width:130px}
+table.cmp tbody th[scope=row]{background:var(--card); font-weight:600; position:sticky; left:0}
+table.cmp tr.grp th{background:color-mix(in srgb,var(--accent) 13%,var(--card)); font:700 16px var(--head); position:static}
+table.cmp td.rv, table.cmp th.rv{background:color-mix(in srgb,var(--accent) 7%,var(--card))}
+table.cmp td.e{text-align:center; vertical-align:middle; font-size:17px}
+/* releases */
+.rel{padding:26px 0; border-top:2px dashed var(--line)}
+.rel:first-of-type{border-top:0; padding-top:0}
+.rel h3{margin:0; font:700 24px var(--head); display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+.rel h3 a{text-decoration:none}
+.rel h3 a:hover{text-decoration:underline wavy var(--accent); text-underline-offset:5px}
+.tag{font:700 19px/1 var(--hand); background:var(--accent); color:var(--accent-fg); border-radius:4px 8px 5px 7px; padding:4px 12px 2px; transform:rotate(-3deg)}
+.rel .date{font-size:16px; color:var(--muted); margin:2px 0 10px}
+.rel ul{margin:0 0 16px; padding-left:20px; color:var(--muted); font-size:16px}
+.rel .body{margin:0 0 16px; font-size:16px; color:var(--muted)}
+.rel .body p{margin:0 0 12px}
+.rel .body h4{font:700 18px var(--head); color:var(--fg); margin:16px 0 6px}
+.rel .body ul{margin:0 0 12px}
+.rel .body a{color:var(--accent); text-underline-offset:3px; word-break:break-word}
+.rel .body .tbl{overflow-x:auto; margin:0 0 14px; border:1.5px solid var(--fg); border-radius:6px; background:var(--card)}
+.rel .body table{border-collapse:collapse; width:100%; font-size:15px; line-height:1.4}
+.rel .body th, .rel .body td{border:1px solid var(--line); padding:6px 11px; text-align:left; vertical-align:top}
+.rel .body th{font:700 15px var(--head); color:var(--fg); background:color-mix(in srgb,var(--accent) 10%,var(--card))}
+.rel .body td code, .rel .body th code{font-size:.85em}
+.rel .body pre{margin:0 0 12px; font-size:13px; padding:12px 16px}
+.dl{display:flex; flex-direction:column; gap:8px}
+.dl a{display:flex; justify-content:space-between; gap:16px; padding:8px 14px; border:1.5px solid var(--fg); border-radius:8px 11px 8px 10px; background:var(--card); text-decoration:none; font:400 14px var(--mono); transition:transform .12s, background .12s}
+.dl a:hover{background:color-mix(in srgb,var(--accent) 14%,var(--card)); transform:translateX(4px)}
+.dl a span{color:var(--muted); white-space:nowrap}
+button.more{font:700 16px var(--head); background:var(--card); color:var(--fg); border:2px solid var(--fg); border-radius:10px 8px 11px 9px; padding:8px 20px; cursor:pointer; margin-top:10px; box-shadow:3px 3px 0 var(--fg)}
+button.more:hover{transform:translate(2px,2px); box-shadow:1px 1px 0 var(--fg)}
+/* contributors */
+.people{display:flex; flex-wrap:wrap; gap:20px}
+.people a{display:flex; flex-direction:column; align-items:center; gap:6px; width:76px; text-decoration:none; color:var(--muted); font-size:14px; text-align:center; word-break:break-all}
+.people img{width:60px; height:60px; border-radius:50%; border:2px solid var(--fg); background:var(--card); transition:transform .15s}
+.people a:hover img{transform:rotate(-6deg) scale(1.08)}
+footer{padding:44px 0 60px; color:var(--muted); font-size:16px; border-top:2px dashed var(--line)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important; scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main>
+  <nav>
+    <a class="brand" href="#"><img src="logo-com-192.png" alt="" width="34" height="34">Raven</a>
+    <a class="l" href="guide.html">Docs</a>
+    <a class="l" href="#releases">Releases</a>
+    <a class="l" href="#contributors">Contributors</a>
+    <a class="l" href="https://github.com/oscar-soirey/Raven">GitHub</a>
+  </nav>
+
+  <header>
+    <span class="stamp">Open source, Apache-2.0</span>
+    <h1>An open source native GUI library in C.</h1>
+    <p class="lead">Free, lightweight, multithreaded, no dependency. Built for editors and tools, usable from the language you like.</p>
+    <a class="btn" href="https://github.com/oscar-soirey/Raven">Get started</a>
+    <a class="btn alt" id="dl" href="#releases">Download</a>
+    <p id="dl-note" class="muted" hidden style="margin:0 0 6px;font-size:15px"></p>
+    <div class="langs" style="margin-top:22px">
+      <span>C</span><span>C++</span><span>Rust</span><span>Python</span>
+      <span>Go</span><span>C#</span><span>Zig</span><span>Lua</span>
+    </div>
+    <p style="margin:14px 0 0;font-size:15px" class="muted">Bindings for all of them. For example: <code>pip install raven-gui</code></p>
+  </header>
+
+  <figure class="shot" style="margin-bottom:40px">
+    <img src="images/studio_glass.png" alt="The studio example: a graph of nodes, a color picker and a timeline, with the dark glass theme" loading="lazy">
+    <figcaption>the studio example, a Raven app</figcaption>
+  </figure>
+
+  <section>
+    <h2>Why Raven</h2>
+    <ul class="why">
+      <li><b>Open source.</b> Apache-2.0: use it for anything, commercial included. No watermark, no paid edition.</li>
+      <li><b>Truly native.</b> Its own windows on Win32, X11, Wayland and Cocoa.</li>
+      <li><b>Small.</b> About 3 MB for the shared library, fonts included.</li>
+      <li><b>Fast.</b> Multithreaded, GPU drawing with Vulkan loaded at run time.</li>
+      <li><b>Complete.</b> Widgets, docking, themes, glass, text editor, node graph, timeline.</li>
+      <li><b>Simple.</b> Describe your interface in C, in XML, or both.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>A window, in your language</h2>
+    <div class="tabs" id="tabs" role="tablist" aria-label="Language"></div>
+    <div class="snips">
+<div class="codebox" data-lang="c" data-name="C" data-href="guide.html#intro"><pre>#include &lt;Raven.h&gt;
+
+static void on_quit(Rid button, void* user_data) {
+    (void)button;
+    (void)user_data;
+    Rquit(0);
+}
+
+int main(void) {
+    if (!Rinit(R_BACKEND_VULKAN)) return 1;
+
+    Rid window = Rwindow_create("Hello", 420, 220, R_WINDOW_DEFAULT);
+    Rid box = Rwidget_create(R_WIDGET_VBOX);
+    Rpanel_set_spacing(box, 12);
+    Rslot_set_halign(box, R_HALIGN_CENTER);
+    Rslot_set_valign(box, R_VALIGN_CENTER);
+    Rwindow_set_content(window, box);
+
+    Rwidget_add_child(box, Rlabel_create("Hello from Raven"));
+    Rid quit = Rwidget_add_child(box, Rbutton_create("Quit"));
+    Rbutton_set_clicked_callback(quit, on_quit, NULL);
+
+    while (Rwait_frame(-1.0)) {}
+    Rshutdown();
+    return Rget_exit_code();
+}</pre></div>
+<div class="codebox" data-lang="cpp" data-name="C++" data-href="bindings.html#cpp-hello"><pre>#include &lt;raven.hpp&gt;
+#include &lt;string&gt;
+
+int main() {
+    if (!raven::init(R_BACKEND_VULKAN)) return 1;
+
+    auto window = raven::Window::create("Hello", 360, 200, R_WINDOW_DEFAULT);
+    auto box    = raven::Panel(raven::Widget::create(R_WIDGET_VBOX));
+    auto title  = raven::Label::create("Hello from C++");
+    auto name   = raven::TextInput::create();
+    auto greet  = raven::Button::create("Greet");
+
+    box.set_spacing(10.0f);
+    box.slot_set_padding(16.0f, 16.0f, 16.0f, 16.0f);
+    name.set_placeholder("Your name");
+    greet.set_style(R_BUTTON_PRIMARY);
+
+    std::string greeting;
+    greet.set_clicked_callback([&amp;](Rid) {          // a lambda, captures included
+        greeting = std::string("Hello, ") + name.get_text() + "!";
+        title.set_text(greeting.c_str());
+    });
+
+    box.add_child(title);
+    box.add_child(name);
+    box.add_child(greet);
+    window.set_content(box);
+
+    raven::action_bind("quit", [](Rid, const char*) { raven::quit(0); });
+    window.register_shortcut(R_KEY_ESCAPE, 0, "quit");
+
+    while (raven::wait_frame(-1.0)) {}
+    raven::shutdown();
+}</pre></div>
+<div class="codebox" data-lang="rust" data-name="Rust" data-href="bindings.html#rust-hello"><pre>use raven::*;
+use std::cell::Cell;
+use std::rc::Rc;
+
+const XML: &amp;str = r#"
+&lt;Window Title="Hello" Width="360" Height="200"&gt;
+    &lt;VBox Spacing="10" Slot.Padding="16"&gt;
+        &lt;Label Name="title" Text="Hello" TextSize="20"/&gt;
+        &lt;TextInput Name="name" Placeholder="Your name"/&gt;
+        &lt;Button Text="Greet" Style="Primary" OnClicked="greet"/&gt;
+    &lt;/VBox&gt;
+&lt;/Window&gt;"#;
+
+fn main() {
+    unsafe {
+        if Rinit(R_BACKEND_VULKAN) == 0 {
+            eprintln!("cannot start Raven");
+            return;
+        }
+    }
+    let window = window_from_xml(XML);
+    let title = widget_find(window, "title");
+    let name = widget_find(window, "name");
+
+    let clicks = Rc::new(Cell::new(0));
+    let counter = clicks.clone();
+    action_bind("greet", move |_sender, _action| unsafe {
+        counter.set(counter.get() + 1);
+        let who = text(Rtext_input_get_text(name));
+        Rlabel_set_text(title, cstr(&amp;format!("Hello, {}!", who)).as_ptr());
+    });
+
+    unsafe {
+        while Rwait_frame(-1.0) != 0 {}
+        Rshutdown();
+    }
+}</pre></div>
+<div class="codebox" data-lang="python" data-name="Python" data-href="bindings.html#python-hello"><pre>import raven as r
+
+XML = """
+&lt;Window Title="Hello" Width="360" Height="200"&gt;
+    &lt;VBox Spacing="10" Slot.Padding="16"&gt;
+        &lt;Label Name="title" Text="Hello" TextSize="20"/&gt;
+        &lt;TextInput Name="name" Placeholder="Your name"/&gt;
+        &lt;Button Text="Greet" Style="Primary" OnClicked="greet"/&gt;
+    &lt;/VBox&gt;
+&lt;/Window&gt;"""
+
+if not r.Rinit(r.R_BACKEND_VULKAN):
+    raise SystemExit("cannot start Raven")
+r.Rerror_set_callback(lambda code, severity, detail: print("raven:", detail))
+
+window = r.Rwindow_create_from_xml(XML)
+title = r.Rwidget_find(window, "title")
+name = r.Rwidget_find(window, "name")
+
+def greet(sender, action, user_data):
+    r.Rlabel_set_text(title, "Hello, %s!" % (r.Rtext_input_get_text(name) or "you"))
+
+r.Raction_bind("greet", greet)
+
+while r.Rwait_frame(-1.0):
+    pass
+r.Rshutdown()</pre></div>
+<div class="codebox" data-lang="go" data-name="Go" data-href="bindings.html#go-hello"><pre>package main
+
+import (
+    "fmt"
+    "runtime"
+
+    "raven/raven"
+)
+
+const xml = `
+&lt;Window Title="Hello" Width="360" Height="200"&gt;
+    &lt;VBox Spacing="10" Slot.Padding="16"&gt;
+        &lt;Label Name="title" Text="Hello" TextSize="20"/&gt;
+        &lt;TextInput Name="name" Placeholder="Your name"/&gt;
+        &lt;Button Text="Greet" Style="Primary" OnClicked="greet"/&gt;
+    &lt;/VBox&gt;
+&lt;/Window&gt;`
+
+func main() {
+    runtime.LockOSThread() // Raven belongs to the thread that starts it
+    if raven.Init(raven.R_BACKEND_VULKAN) == 0 {
+        fmt.Println("cannot start Raven")
+        return
+    }
+    raven.ErrorSetCallback(func(code raven.RError, severity raven.RSeverity, detail string) {
+        fmt.Println("raven:", detail)
+    })
+
+    window := raven.WindowCreateFromXml(xml)
+    title := raven.WidgetFind(window, "title")
+    name := raven.WidgetFind(window, "name")
+    raven.ActionBind("greet", func(sender raven.ID, action string) {
+        raven.LabelSetText(title, "Hello, "+raven.TextInputGetText(name)+"!")
+    })
+
+    for raven.WaitFrame(-1.0) != 0 {
+    }
+    raven.Shutdown()
+}</pre></div>
+<div class="codebox" data-lang="csharp" data-name="C#" data-href="bindings.html#csharp-hello"><pre>using System;
+using Raven;
+
+static class Program
+{
+    const string Xml = @"
+&lt;Window Title=""Hello"" Width=""360"" Height=""200""&gt;
+    &lt;VBox Spacing=""10"" Slot.Padding=""16""&gt;
+        &lt;Label Name=""title"" Text=""Hello"" TextSize=""20""/&gt;
+        &lt;TextInput Name=""name"" Placeholder=""Your name""/&gt;
+        &lt;Button Text=""Greet"" Style=""Primary"" OnClicked=""greet""/&gt;
+    &lt;/VBox&gt;
+&lt;/Window&gt;";
+
+    static void Main()
+    {
+        if (R.Rinit(RBackend.R_BACKEND_VULKAN) == 0) { Console.WriteLine("cannot start Raven"); return; }
+        R.Rerror_set_callback(R.Keep&lt;RErrorCallback&gt;((code, severity, detail) =&gt;
+            Console.WriteLine("raven: " + R.Text(detail))));
+
+        uint window = R.Rwindow_create_from_xml(Xml);
+        uint title = R.Rwidget_find(window, "title");
+        uint name = R.Rwidget_find(window, "name");
+
+        R.Raction_bind("greet", R.Keep&lt;RActionCallback&gt;((sender, action, user) =&gt;
+            R.Rlabel_set_text(title, "Hello, " + R.Rtext_input_get_text(name) + "!")), IntPtr.Zero);
+
+        while (R.Rwait_frame(-1.0) != 0) { }
+        R.Rshutdown();
+    }
+}</pre></div>
+<div class="codebox" data-lang="zig" data-name="Zig" data-href="bindings.html#zig-hello"><pre>const std = @import("std");
+const r = @import("raven.zig");
+
+var title: r.Rid = r.R_INVALID_ID;
+var name: r.Rid = r.R_INVALID_ID;
+
+pub fn main() void {
+    if (r.Rinit(r.R_BACKEND_VULKAN) == 0) return;
+    const xml =
+        \\&lt;Window Title="Hello" Width="360" Height="200"&gt;
+        \\    &lt;VBox Spacing="10" Slot.Padding="16"&gt;
+        \\        &lt;Label Name="title" Text="Hello" TextSize="20"/&gt;
+        \\        &lt;TextInput Name="name" Placeholder="Your name"/&gt;
+        \\        &lt;Button Text="Greet" Style="Primary" OnClicked="greet"/&gt;
+        \\    &lt;/VBox&gt;
+        \\&lt;/Window&gt;
+    ;
+    const window = r.Rwindow_create_from_xml(xml, xml.len);
+    title = r.Rwidget_find(window, "title");
+    name = r.Rwidget_find(window, "name");
+    r.Raction_bind("greet", greet, null);
+    while (r.Rwait_frame(-1.0) != 0) {}
+    r.Rshutdown();
+}
+
+fn greet(sender: r.Rid, action: ?[*:0]const u8, user_data: ?*anyopaque) callconv(.C) void {
+    _ = sender; _ = action; _ = user_data;
+    const who = std.mem.span(r.Rtext_input_get_text(name) orelse "");
+    var buffer: [256]u8 = undefined;
+    const text = std.fmt.bufPrintZ(&amp;buffer, "Hello, {s}!", .{who}) catch return;
+    r.Rlabel_set_text(title, text.ptr);
+}</pre></div>
+<div class="codebox" data-lang="lua" data-name="Lua" data-href="bindings.html#lua-hello"><pre>local r = require("raven")
+local ffi = r.ffi
+
+assert(r.Rinit(r.R_BACKEND_VULKAN) ~= 0, "cannot start Raven")
+
+local xml = [[
+&lt;Window Title="Hello" Width="360" Height="200"&gt;
+    &lt;VBox Spacing="10" Slot.Padding="16"&gt;
+        &lt;Label Name="title" Text="Hello" TextSize="20"/&gt;
+        &lt;TextInput Name="name" Placeholder="Your name"/&gt;
+        &lt;Button Text="Greet" Style="Primary" OnClicked="greet"/&gt;
+    &lt;/VBox&gt;
+&lt;/Window&gt;]]
+local window = r.Rwindow_create_from_xml(xml, #xml)
+local title = r.Rwidget_find(window, "title")
+local name = r.Rwidget_find(window, "name")
+
+-- keep the callback in a variable that lives as long as the program
+local greet = ffi.cast("RActionCallback", function(sender, action, user_data)
+    local who = ffi.string(r.Rtext_input_get_text(name))
+    r.Rlabel_set_text(title, "Hello, " .. who .. "!")
+end)
+r.Raction_bind("greet", greet, nil)
+
+while r.Rwait_frame(-1.0) ~= 0 do end
+r.Rshutdown()
+greet:free()</pre></div>
+    </div>
+    <p class="muted" style="margin:16px 0 0">The full program is in <a id="snip-more" href="guide.html#intro" style="color:var(--accent)">the docs</a>.</p>
+  </section>
+
+  <section>
+    <h2>The designer</h2>
+    <p style="margin:0 0 28px">raven_designer is a visual designer. Draw your windows and widgets, shape your styles, write your translations, and more, all graphically.</p>
+    <p class="note">and the designer itself is built with Raven</p>
+    <figure class="shot">
+      <img src="images/designer.png" alt="raven_designer: widgets, tree, live preview, properties and XML" loading="lazy">
+      <figcaption>raven_designer: the widgets that can be added, the tree, the interface built for real, its attributes, and the XML.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Examples</h2>
+    <figure class="shot">
+      <img src="images/workspace.png" alt="The workspace example: docked panels, a file browser and an island" loading="lazy">
+      <figcaption>workspace: docked panels, a file browser and an island, with a custom header bar.</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="images/glass.png" alt="The glass example: frosted side bar, tinted tool bar and clear player bar" loading="lazy">
+      <figcaption>glass: a frosted side bar, a tinted tool bar and a clear player bar over a scrolling page.</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="images/notepad.png" alt="The notepad example: a text editor with a custom title bar" loading="lazy">
+      <figcaption>notepad: the title bar is a widget; the lines that say TODO and FIXME are marked.</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="images/bevy_editor_viewport.png" alt="The Bevy editor example: a 3D scene editor driven from Rust" loading="lazy">
+      <figcaption>bevy_editor: a 3D scene editor in Rust, its whole interface in one XML file.</figcaption>
+    </figure>
+  </section>
+
+  <section id="compare">
+    <h2>Raven compared with Qt, Clay and Dear ImGui</h2>
+    <p class="muted" style="margin:0 0 18px">Four libraries that put an interface on a screen, in four different shapes.
+Raven and Qt are complete toolkits; Dear ImGui is an immediate-mode library for
+tools; Clay only computes layout. A &#10060; on a smaller library is therefore a
+choice of scope, not a defect, and the rows are not meant to rank them.
+&#9989; yes, built in &middot; &#128993; partly, or through add-ons or your own code &middot; &#10060; no.</p>
+    <div class="cmp-wrap">
+<table class="cmp">
+<thead><tr><th></th><th class="rv">Raven</th><th>Qt 6</th><th>Clay</th><th>Dear ImGui</th></tr></thead>
+<tbody>
+<tr class="grp"><th colspan="5">How they work</th></tr>
+<tr><th scope="row">Nature</th><td class="rv">Complete GUI toolkit</td><td>Complete application framework</td><td>Layout only</td><td>Immediate-mode UI for tools</td></tr>
+<tr><th scope="row">API language</th><td class="rv">C11; bindings for C++, Python, Rust, Go, C#, Zig, LuaJIT</td><td>C++ and QML; Python via PySide6</td><td>C, a single header</td><td>C++; C through cimgui</td></tr>
+<tr><th scope="row">Model</th><td class="rv">Retained tree; only changes are redrawn</td><td>Retained; event-driven</td><td>Tree declared every frame</td><td>Code runs and draws every frame</td></tr>
+<tr><th scope="row">Rendering</th><td class="rv">Vulkan (MoltenVK on macOS)</td><td>RHI: Vulkan, Metal, Direct3D, OpenGL</td><td>None: outputs draw commands</td><td>None: about 20 backends</td></tr>
+<tr><th scope="row">Platforms</th><td class="rv">Windows, Linux (X11 or Wayland), macOS. No mobile, no web</td><td>Desktop, mobile, embedded, web</td><td>Anywhere C compiles, WebAssembly included</td><td>Desktop, consoles, embedded, web</td></tr>
+<tr><th scope="row">Dependencies</th><td class="rv">None linked</td><td>Modules and platform plugins</td><td>None</td><td>A backend</td></tr>
+<tr><th scope="row">Build</th><td class="rv">CMake 3.16+, C11 compiler</td><td>CMake, moc, rcc, uic</td><td>One header</td><td>Add the .cpp files</td></tr>
+<tr class="grp"><th colspan="5">What it has</th></tr>
+<tr><th scope="row">Layout system</th><td class="e rv">✅</td><td class="e">✅</td><td class="e">✅</td><td class="e">🟡</td></tr>
+<tr><th scope="row">Interface in markup</th><td class="e rv">✅</td><td class="e">✅</td><td class="e">❌</td><td class="e">❌</td></tr>
+<tr><th scope="row">Live reload</th><td class="e rv">✅</td><td class="e">✅</td><td class="e">❌</td><td class="e">❌</td></tr>
+<tr><th scope="row">Native windows</th><td class="e rv">✅</td><td class="e">✅</td><td class="e">❌</td><td class="e">❌</td></tr>
+<tr><th scope="row">Standard controls</th><td class="e rv">✅</td><td class="e">✅</td><td class="e">❌</td><td class="e">✅</td></tr>
+<tr><th scope="row">Very long lists</th><td class="e rv">✅</td><td class="e">✅</td><td class="e">❌</td><td class="e">✅</td></tr>
+<tr><th scope="row">Code editor</th><td class="e rv">✅</td><td class="e">✅</td><td class="e">❌</td><td class="e">🟡</td></tr>
+<tr><th scope="row">Docking</th><td class="e rv">✅</td><td class="e">✅</td><td class="e">❌</td><td class="e">🟡</td></tr>
+<tr><th scope="row">Specialized tools</th><td class="e rv">✅</td><td class="e">✅</td><td class="e">❌</td><td class="e">🟡</td></tr>
+<tr><th scope="row">Web pages</th><td class="e rv">🟡</td><td class="e">✅</td><td class="e">❌</td><td class="e">❌</td></tr>
+<tr><th scope="row">Theming</th><td class="e rv">✅</td><td class="e">✅</td><td class="e">🟡</td><td class="e">🟡</td></tr>
+<tr><th scope="row">Glass and blur</th><td class="e rv">✅</td><td class="e">✅</td><td class="e">❌</td><td class="e">❌</td></tr>
+<tr><th scope="row">Animation</th><td class="e rv">✅</td><td class="e">✅</td><td class="e">❌</td><td class="e">❌</td></tr>
+<tr><th scope="row">Custom shaders</th><td class="e rv">✅</td><td class="e">✅</td><td class="e">🟡</td><td class="e">🟡</td></tr>
+<tr><th scope="row">Translations</th><td class="e rv">✅</td><td class="e">✅</td><td class="e">❌</td><td class="e">❌</td></tr>
+<tr><th scope="row">Right to left, shaping</th><td class="e rv">🟡</td><td class="e">✅</td><td class="e">❌</td><td class="e">❌</td></tr>
+<tr><th scope="row">Accessibility</th><td class="e rv">✅</td><td class="e">✅</td><td class="e">❌</td><td class="e">❌</td></tr>
+<tr><th scope="row">Visual designer</th><td class="e rv">✅</td><td class="e">✅</td><td class="e">🟡</td><td class="e">❌</td></tr>
+<tr><th scope="row">Headless tests</th><td class="e rv">✅</td><td class="e">✅</td><td class="e">🟡</td><td class="e">🟡</td></tr>
+<tr class="grp"><th colspan="5">The project</th></tr>
+<tr><th scope="row">License</th><td class="rv">Apache 2.0</td><td>LGPL 3, GPL or commercial</td><td>zlib</td><td>MIT</td></tr>
+<tr><th scope="row">Maturity</th><td class="rv">Version 0.1; API may change; small community</td><td>Since the 1990s; vast ecosystem</td><td>Since 2024; fast-moving</td><td>Since 2014; large community</td></tr>
+<tr><th scope="row">Fits best</th><td class="rv">Desktop tools and editors in C or its bindings</td><td>Large cross-platform apps, mobile and embedded</td><td>Engines that already own the renderer</td><td>Debug panels in real-time apps</td></tr>
+</tbody>
+</table>
+</div>
+    <p class="muted" style="font-size:14px;margin:14px 0 0">This is Raven&rsquo;s own manual, so read it with that in mind. Written in
+October 2026 from the documentation of each project
+(<a href="https://doc.qt.io/qt-6/licensing.html">Qt licensing</a>,
+<a href="https://github.com/nicbarker/clay">Clay</a>,
+<a href="https://github.com/ocornut/imgui">Dear ImGui</a>) and from this manual for Raven;
+if a cell is wrong or out of date, please
+<a href="https://github.com/oscar-soirey/Raven/issues">open an issue</a>.</p>
+  </section>
+
+  <section id="releases">
+    <h2>Releases</h2>
+    <p class="note">prebuilt packages are attached to each release</p>
+    <div id="rel-list" class="muted">Loading releases…</div>
+  </section>
+
+  <section id="contributors">
+    <h2>Contributors</h2>
+    <div id="people" class="people muted">Loading contributors…</div>
+  </section>
+
+  <footer>
+    Open source under the <a href="https://github.com/oscar-soirey/Raven/blob/main/LICENSE">Apache License 2.0</a>. Made by <a href="https://github.com/oscar-soirey">Oscar Soirey</a> and contributors.
+  </footer>
+</main>
+
+<script>
+(function(){
+  var REPO = 'oscar-soirey/Raven';
+  var GH = 'https://github.com/' + REPO;
+
+  function api(path){
+    var key = 'raven:' + path;
+    try { var c = sessionStorage.getItem(key); if (c) return Promise.resolve(JSON.parse(c)); } catch (e) {}
+    return fetch('https://api.github.com/repos/' + REPO + path, { headers: { Accept: 'application/vnd.github+json' } })
+      .then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function(j){ try { sessionStorage.setItem(key, JSON.stringify(j)); } catch (e) {} return j; });
+  }
+  function el(tag, cls, text){
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function count(n){ return (n || 0).toLocaleString('en-GB') + (n === 1 ? ' download' : ' downloads'); }
+  function detectOS(){
+    var s = ((navigator.userAgentData && navigator.userAgentData.platform) || '') + ' ' + (navigator.platform || '') + ' ' + (navigator.userAgent || '');
+    s = s.toLowerCase();
+    if (/android|iphone|ipad|ipod|cros/.test(s) || (/mac/.test(s) && navigator.maxTouchPoints > 1)) return null;
+    if (/win/.test(s)) return 'Windows';
+    if (/mac/.test(s)) return 'macOS';
+    if (/linux|x11/.test(s)) return 'Linux';
+    return null;
+  }
+  function setDownload(rels){
+    var r = rels.filter(function(x){ return !x.prerelease; })[0] || rels[0], os = detectOS();
+    if (!r || !os) return;
+    var re = { Windows: /(^|[^a-z])win(dows|32|64)?([^a-z]|$)/i, macOS: /mac|darwin|osx/i, Linux: /linux/i }[os];
+    var as = (r.assets || []).filter(function(a){ return re.test(a.name) && !/\.(sha256|sha512|sig|asc|txt|md5)$/i.test(a.name); })[0];
+    if (!as) return;
+    var b = document.getElementById('dl'), n = document.getElementById('dl-note');
+    b.textContent = 'Download for ' + os;
+    n.textContent = (r.name || r.tag_name) + ', ' + as.name + ', ' + size(as.size) + '. Other systems and versions are in Releases below.';
+    n.hidden = false;
+  }
+  function size(b){ return b > 1048576 ? (b / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB'; }
+  function inline(parent, text){
+    var re = /(`[^`]+`)|(\*\*[^*]+\*\*)|(\[[^\]]+\]\(https?:\/\/[^)\s]+\))|(https?:\/\/[^\s)<]+)/g, last = 0, m, a;
+    while ((m = re.exec(text))) {
+      if (m.index > last) parent.appendChild(document.createTextNode(text.slice(last, m.index)));
+      var t = m[0];
+      if (m[1]) parent.appendChild(el('code', null, t.slice(1, -1)));
+      else if (m[2]) parent.appendChild(el('b', null, t.slice(2, -2)));
+      else if (m[3]) { var mm = /^\[([^\]]+)\]\((.+)\)$/.exec(t); a = el('a', null, mm[1]); a.href = mm[2]; parent.appendChild(a); }
+      else { a = el('a', null, t); a.href = t; parent.appendChild(a); }
+      last = re.lastIndex;
+    }
+    if (last < text.length) parent.appendChild(document.createTextNode(text.slice(last)));
+  }
+  function cells(line){
+    return line.trim().replace(/\\\|/g, '\u0001').replace(/^\||\|$/g, '').split('|')
+      .map(function(c){ return c.replace(/\u0001/g, '|').trim(); });
+  }
+  function makeTable(rows){
+    var wrap = el('div', 'tbl'), table = el('table'), head = null, align = [];
+    if (rows.length > 1 && /^\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?$/.test(rows[1].trim())) {
+      head = cells(rows[0]);
+      align = cells(rows[1]).map(function(c){ return /^:-*:$/.test(c) ? 'center' : /-:$/.test(c) ? 'right' : ''; });
+      rows = rows.slice(2);
+    }
+    function fill(tr, arr, tag){
+      arr.forEach(function(c, i){ var td = el(tag); if (align[i]) td.style.textAlign = align[i]; inline(td, c); tr.appendChild(td); });
+    }
+    if (head) { var th = el('thead'), htr = el('tr'); fill(htr, head, 'th'); th.appendChild(htr); table.appendChild(th); }
+    var tb = el('tbody');
+    rows.forEach(function(r){ var tr = el('tr'); fill(tr, cells(r), 'td'); tb.appendChild(tr); });
+    table.appendChild(tb); wrap.appendChild(table);
+    return wrap;
+  }
+  function renderBody(body){
+    var wrap = el('div', 'body'), ul = null, para = [], code = null, tbl = [];
+    function flush(){
+      if (para.length) { var p = el('p'); inline(p, para.join(' ')); wrap.appendChild(p); para = []; }
+      if (tbl.length) { wrap.appendChild(makeTable(tbl)); tbl = []; }
+    }
+    body.split(/\r?\n/).forEach(function(raw){
+      if (/^\s*```/.test(raw)) {
+        if (code) { wrap.appendChild(el('pre', null, code.join('\n'))); code = null; }
+        else { flush(); ul = null; code = []; }
+        return;
+      }
+      if (code) { code.push(raw); return; }
+      var line = raw.trim();
+      if (!line) { flush(); ul = null; return; }
+      if (line.charAt(0) === '|') {
+        if (para.length) flush();
+        ul = null; tbl.push(line); return;
+      }
+      if (tbl.length) flush();
+      var h = /^#{1,6}\s+(.*)$/.exec(line);
+      if (h) { flush(); ul = null; var h4 = el('h4'); inline(h4, h[1]); wrap.appendChild(h4); return; }
+      var li = /^[-*]\s+(.*)$/.exec(line);
+      if (li) { flush(); if (!ul) { ul = el('ul'); wrap.appendChild(ul); } var l = el('li'); inline(l, li[1]); ul.appendChild(l); return; }
+      ul = null; para.push(line);
+    });
+    flush();
+    if (code) wrap.appendChild(el('pre', null, code.join('\n')));
+    return wrap;
+  }
+  function fail(node, what, href){
+    node.textContent = '';
+    var a = el('a', null, 'See the ' + what + ' on GitHub');
+    a.href = href; a.style.color = 'var(--accent)';
+    node.appendChild(a);
+  }
+
+  // The Download button: the images above load while the page scrolls and push the target away, so align again once they have
+  document.getElementById('dl').addEventListener('click', function(e){
+    var t = document.getElementById('releases');
+    if (!t) return;
+    e.preventDefault();
+    function go(){ t.scrollIntoView({ behavior: 'instant', block: 'start' }); }
+    go(); setTimeout(go, 300); setTimeout(go, 900);
+    if (history.replaceState) history.replaceState(null, '', '#releases');
+  });
+
+  // Releases
+  var list = document.getElementById('rel-list');
+  api('/releases?per_page=30').then(function(rels){
+    list.textContent = '';
+    list.className = '';
+    rels = rels.filter(function(r){ return !r.draft; });
+    if (!rels.length) { fail(list, 'releases', GH + '/releases'); return; }
+    setDownload(rels);
+    var older = el('div'); older.hidden = true;
+    rels.forEach(function(r, i){
+      var box = el('div', 'rel');
+      var h = el('h3');
+      var a = el('a', null, r.name || r.tag_name); a.href = r.html_url;
+      h.appendChild(a);
+      if (i === 0 && !r.prerelease) h.appendChild(el('span', 'tag', 'Latest'));
+      if (r.prerelease) h.appendChild(el('span', 'tag', 'Pre-release'));
+      box.appendChild(h);
+      var total = (r.assets || []).reduce(function(n, as){ return n + (as.download_count || 0); }, 0);
+      box.appendChild(el('div', 'date', new Date(r.published_at || r.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) + ', ' + count(total)));
+      if (r.body && r.body.trim()) box.appendChild(renderBody(r.body));
+      var dl = el('div', 'dl');
+      (r.assets || []).forEach(function(as){
+        var d = el('a'); d.href = as.browser_download_url; d.setAttribute('download', '');
+        d.appendChild(el('b', null, as.name));
+        d.appendChild(el('span', null, '↓ ' + size(as.size) + ', ' + count(as.download_count)));
+        dl.appendChild(d);
+      });
+      if (r.zipball_url) {
+        var z = el('a'); z.href = r.zipball_url;
+        z.appendChild(el('b', null, 'Source code (zip)'));
+        z.appendChild(el('span', null, '↓'));
+        dl.appendChild(z);
+      }
+      box.appendChild(dl);
+      (i < 3 ? list : older).appendChild(box);
+    });
+    if (rels.length > 3) {
+      var btn = el('button', 'more', 'Show older versions (' + (rels.length - 3) + ')');
+      btn.onclick = function(){ older.hidden = false; btn.remove(); };
+      list.appendChild(older); list.appendChild(btn);
+    }
+  }).catch(function(){ fail(list, 'releases', GH + '/releases'); });
+
+  // Contributors
+  var people = document.getElementById('people');
+  api('/contributors?per_page=100').then(function(cs){
+    people.textContent = '';
+    people.className = 'people';
+    if (!cs.length) { fail(people, 'contributors', GH + '/graphs/contributors'); return; }
+    cs.forEach(function(c){
+      var a = el('a'); a.href = c.html_url; a.title = c.login + ' · ' + c.contributions + ' commits';
+      var img = el('img'); img.src = c.avatar_url + '&s=112'; img.alt = ''; img.loading = 'lazy';
+      a.appendChild(img); a.appendChild(el('span', null, c.login));
+      people.appendChild(a);
+    });
+  }).catch(function(){ fail(people, 'contributors', GH + '/graphs/contributors'); });
+})();
+</script>
+<script>
+(function(){
+  /* ---------- coloration ---------- */
+  var C_COM = String.raw`//[^\n]*|/\*[\s\S]*?\*/`;
+  var DQ = String.raw`"(?:\\.|[^"\\\n])*"`;
+  var SQ = String.raw`'(?:\\.|[^'\\\n])*'`;
+  var LANGS = {
+    c:      { kw:'if else for while do return static const void int char float double long unsigned struct enum typedef sizeof NULL true false', com:C_COM, str:DQ+'|'+SQ, pre:true },
+    cpp:    { kw:'auto const int float void return if else for while class struct namespace new delete using nullptr true false', com:C_COM, str:DQ, pre:true },
+    rust:   { kw:'use fn let mut const unsafe if else while for return move struct impl pub mod true false as', com:C_COM, str:String.raw`r#"[\s\S]*?"#|`+DQ },
+    python: { kw:'import as def return if else elif not and or while for in raise from pass lambda True False None', com:String.raw`#[^\n]*`, str:String.raw`"""[\s\S]*?"""|`+DQ+'|'+SQ },
+    go:     { kw:'package import func const var if else for return range struct true false nil', com:C_COM, str:'`[^`]*`|'+DQ },
+    csharp: { kw:'using static class void const string uint int new return if else true false null var', com:C_COM, str:String.raw`@"(?:""|[^"])*"|`+DQ },
+    zig:    { kw:'const var pub fn if else return while for callconv void null undefined anyopaque', com:String.raw`//[^\n]*`, str:String.raw`\\\\[^\n]*|`+DQ },
+    lua:    { kw:'local function end if then else do while for return not nil true false and or', com:String.raw`--\[\[[\s\S]*?\]\]|--[^\n]*`, str:String.raw`\[\[[\s\S]*?\]\]|`+DQ }
+  };
+  var CLS = [null, 'c', 's', 'm', 'n', 'k', 'm', 'f', 't'];
+  function build(l){
+    return new RegExp([
+      '(' + l.com + ')', '(' + l.str + ')',
+      l.pre ? String.raw`(^[ \t]*#[ \t]*[a-z]+(?:[ \t]*<[^>\n]+>)?)` : '((?!))',
+      String.raw`(\b0x[0-9a-fA-F]+\b|\b\d+(?:\.\d+)?[fFuUlL]*\b)`,
+      String.raw`(\b(?:` + l.kw.split(' ').join('|') + String.raw`)\b)`,
+      String.raw`(\b[A-Z][A-Z0-9_]{2,}\b)`,
+      String.raw`(@\w+|\b[A-Za-z_]\w*(?=\())`,
+      String.raw`(\b[A-Z][a-z0-9]\w*\b)`
+    ].join('|'), 'gm');
+  }
+  function tokens(text, lang){
+    var l = LANGS[lang]; if (!l) return [{ c: null, t: text }];
+    var re = build(l), out = [], last = 0, m, i;
+    while ((m = re.exec(text))) {
+      if (!m[0].length) { re.lastIndex++; continue; }
+      i = 1; while (!m[i]) i++;
+      if (m.index > last) out.push({ c: null, t: text.slice(last, m.index) });
+      out.push({ c: CLS[i], t: m[0] });
+      last = m.index + m[0].length;
+    }
+    if (last < text.length) out.push({ c: null, t: text.slice(last) });
+    return out;
+  }
+  function paint(pre, lang){
+    var frag = document.createDocumentFragment();
+    tokens(pre.textContent, lang).forEach(function(k){
+      if (!k.c) { frag.appendChild(document.createTextNode(k.t)); return; }
+      var s = document.createElement('span'); s.className = k.c; s.textContent = k.t; frag.appendChild(s);
+    });
+    pre.textContent = ''; pre.appendChild(frag);
+  }
+  if (typeof module !== 'undefined') module.exports = { tokens: tokens };
+  if (typeof document === 'undefined') return;
+
+  /* ---------- bouton copier ---------- */
+  function copy(text, btn){
+    function done(){ btn.textContent = 'Copied!'; setTimeout(function(){ btn.textContent = 'Copy'; }, 1500); }
+    function fallback(){
+      var t = document.createElement('textarea'); t.value = text; t.style.cssText = 'position:fixed;opacity:0';
+      document.body.appendChild(t); t.select();
+      try { document.execCommand('copy'); done(); } catch (e) { btn.textContent = 'Ctrl+C'; }
+      document.body.removeChild(t);
+    }
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fallback); else fallback();
+  }
+  function addCopy(box){
+    var pre = box.querySelector('pre'), b = document.createElement('button');
+    b.type = 'button'; b.className = 'copy'; b.textContent = 'Copy'; b.setAttribute('aria-label', 'Copy the code');
+    b.addEventListener('click', function(){ copy(pre.textContent, b); });
+    box.appendChild(b);
+  }
+
+  /* ---------- un extrait par langage ---------- */
+  var boxes = [].slice.call(document.querySelectorAll('.snips .codebox'));
+  var tabs = document.getElementById('tabs'), more = document.getElementById('snip-more');
+  var btns = [];
+  function show(i){
+    boxes.forEach(function(b, k){ b.hidden = k !== i; btns[k].setAttribute('aria-selected', k === i ? 'true' : 'false'); });
+    more.href = boxes[i].getAttribute('data-href');
+    more.textContent = boxes[i].getAttribute('data-name') + ' in the docs';
+  }
+  boxes.forEach(function(b, i){
+    paint(b.querySelector('pre'), b.getAttribute('data-lang'));
+    addCopy(b);
+    var t = document.createElement('button');
+    t.type = 'button'; t.setAttribute('role', 'tab'); t.textContent = b.getAttribute('data-name');
+    t.addEventListener('click', function(){ show(i); });
+    btns.push(t); tabs.appendChild(t);
+  });
+  if (boxes.length) show(0);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../../bindings/csharp/Raven.cs" Link="Raven.cs" />
+    <None Update="main.xml" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="strings.csv" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

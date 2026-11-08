@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A light theme: warm paper, ink, square corners. -->
+<Theme Name="Paper" Base="Light" Accent="#B45309" CornerRadius="3">
+	<Colors Window="#F6F1E7" Panel="#FBF8F1" Popup="#FFFDF8" Header="#EDE6D6" Input="#FFFDF8" Text="#2B2620" Separator="#00000024" Border="#0000002E"/>
+	<Metrics ControlHeight="30" BorderWidth="1"/>
+	<Syntax Keyword="#9A3412" String="#3F6212" Comment="#A8A29E" Heading="#B45309"/>
+
+	<Style Class="danger" Accent="#B91C1C" AccentHovered="#DC2626" AccentPressed="#7F1D1D"/>
+	<Style Class="card" Panel="#FFFDF8" CornerRadius="4"/>
+	<Style Widget="Label" Class="eyebrow" Text="#B45309" FontSize="12"/>
+</Theme>

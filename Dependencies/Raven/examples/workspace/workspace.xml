@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Raven example - workspace
+
+  A DockArea arranges its children as panels the user moves by dragging their
+  tabs: onto another tab bar (tabs together), onto a side of a panel or of
+  the whole area (split). The slot of each child says where it starts:
+
+    Slot.Title      text of its tab
+    Slot.Dock       Left, Right, Top, Bottom, or Tab (with the panel named by Slot.DockTo)
+    Slot.DockTo     name of the panel it is placed against; without it, the whole area
+    Slot.DockSize   share of the place it takes, 0..1
+    Slot.Closable   false removes the close button of its tab
+
+  Material="..." chooses what a widget is made of, whatever the theme:
+  Solid, Glass (clear), FrostedGlass or TintedGlass.
+-->
+<Window Title="Raven - workspace" Width="1180" Height="720" MinWidth="760" MinHeight="460" CustomHeader="true">
+	<Island Name="island" Slot.Padding="0,5,0,0" ExpandOnClick="false">
+		<Label Name="island.text" Text="Workspace" Slot.Padding="14,5"/>
+		<VBox Spacing="6" Slot.Padding="18,12" Width="320">
+			<Label Name="island.title" Text="Workspace" TextSize="16"/>
+			<Label Name="island.detail" Text="Drag a tab to move its panel." Wrap="true" Opacity="0.75"/>
+		</VBox>
+	</Island>
+
+	<VBox>
+		<HeaderBar Title="" Background="false">
+			<Button Text="Save layout" Style="Flat" OnClicked="layout.save" Tooltip="Remembers how the panels are arranged"/>
+			<Button Text="Restore" Style="Flat" OnClicked="layout.restore" Tooltip="Arranges the panels as they were saved"/>
+			<Button Text="New note" Style="Flat" OnClicked="note.new" Tooltip="Adds a panel, as a tab of the editor"/>
+		</HeaderBar>
+
+		<DockArea Name="dock" Slot.Fill="1">
+			<TextEditor Name="welcome" Slot.Title="Welcome" LineNumbers="true" Language="C"/>
+
+			<FileBrowser Name="files" Slot.Title="Files" Slot.Dock="Left" Slot.DockSize="0.24" Slot.Closable="false"
+				Controls="false" Places="false"/>
+
+			<VBox Name="look" Slot.Title="Appearance" Slot.Dock="Right" Slot.DockSize="0.24" Spacing="10" Slot.Padding="12">
+				<Label Text="Theme"/>
+				<ComboBox Name="theme" Items="Dark|Light|Dark glass|Light glass" Selected="2" OnChanged="look.theme"/>
+				<Label Text="Material of everything" Slot.Padding="0,6,0,0"/>
+				<ComboBox Name="material" Items="As the theme|Solid|Glass|Frosted glass|Tinted glass" Selected="0" OnChanged="look.material"/>
+				<Label Text="Material of this panel only" Slot.Padding="0,6,0,0"/>
+				<ComboBox Name="panel.material" Items="As everything|Solid|Glass|Frosted glass|Tinted glass" Selected="0" OnChanged="look.panel"/>
+				<Separator Slot.Padding="0,6"/>
+				<Label Wrap="true" Opacity="0.7"
+					Text="Clear glass shows what is behind it, frosted glass blurs it, tinted glass colors it. A popup is always more opaque than the panel it comes from, and a panel than the bar above it."/>
+			</VBox>
+
+			<ListView Name="log" Slot.Title="Log" Slot.Dock="Bottom" Slot.DockTo="welcome" Slot.DockSize="0.26"/>
+			<VBox Name="about" Slot.Title="About" Slot.Dock="Tab" Slot.DockTo="log" Spacing="6" Slot.Padding="12">
+				<Label Text="Panels can share a tab bar: drag this tab away and back."/>
+				<Label Name="layout.text" Opacity="0.6" Wrap="true"/>
+			</VBox>
+		</DockArea>
+	</VBox>
+</Window>

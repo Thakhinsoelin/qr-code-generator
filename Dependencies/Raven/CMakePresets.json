@@ -1,0 +1,158 @@
+{
+	"version": 3,
+	"cmakeMinimumRequired": {
+		"major": 3,
+		"minor": 21,
+		"patch": 0
+	},
+	"configurePresets": [
+		{
+			"name": "base",
+			"hidden": true,
+			"binaryDir": "${sourceDir}/build/${presetName}",
+			"installDir": "${sourceDir}/build/${presetName}/install"
+		},
+		{
+			"name": "msvc",
+			"displayName": "Visual C++ (the newest Visual Studio installed), static library",
+			"inherits": "base",
+			"condition": {
+				"type": "equals",
+				"lhs": "${hostSystemName}",
+				"rhs": "Windows"
+			}
+		},
+		{
+			"name": "msvc-shared",
+			"displayName": "Visual C++, raven.dll",
+			"inherits": "msvc",
+			"cacheVariables": {
+				"RAVEN_BUILD_SHARED": "ON"
+			}
+		},
+		{
+			"name": "mingw",
+			"displayName": "MinGW-w64 (gcc), static library",
+			"inherits": "base",
+			"generator": "MinGW Makefiles",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Release",
+				"CMAKE_C_COMPILER": "gcc"
+			},
+			"condition": {
+				"type": "equals",
+				"lhs": "${hostSystemName}",
+				"rhs": "Windows"
+			}
+		},
+		{
+			"name": "mingw-shared",
+			"displayName": "MinGW-w64 (gcc), raven.dll",
+			"inherits": "mingw",
+			"cacheVariables": {
+				"RAVEN_BUILD_SHARED": "ON"
+			}
+		},
+		{
+			"name": "linux",
+			"displayName": "Linux, static library",
+			"inherits": "base",
+			"generator": "Unix Makefiles",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Release"
+			},
+			"condition": {
+				"type": "equals",
+				"lhs": "${hostSystemName}",
+				"rhs": "Linux"
+			}
+		},
+		{
+			"name": "linux-shared",
+			"displayName": "Linux, libraven.so",
+			"inherits": "linux",
+			"cacheVariables": {
+				"RAVEN_BUILD_SHARED": "ON"
+			}
+		},
+		{
+			"name": "dev",
+			"displayName": "Debug, warnings as errors",
+			"inherits": "base",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug",
+				"RAVEN_WARNINGS_AS_ERRORS": "ON"
+			}
+		}
+	],
+	"buildPresets": [
+		{
+			"name": "msvc",
+			"configurePreset": "msvc",
+			"configuration": "Release"
+		},
+		{
+			"name": "msvc-shared",
+			"configurePreset": "msvc-shared",
+			"configuration": "Release"
+		},
+		{
+			"name": "mingw",
+			"configurePreset": "mingw"
+		},
+		{
+			"name": "mingw-shared",
+			"configurePreset": "mingw-shared"
+		},
+		{
+			"name": "linux",
+			"configurePreset": "linux"
+		},
+		{
+			"name": "linux-shared",
+			"configurePreset": "linux-shared"
+		},
+		{
+			"name": "dev",
+			"configurePreset": "dev"
+		}
+	],
+	"testPresets": [
+		{
+			"name": "msvc",
+			"configurePreset": "msvc",
+			"configuration": "Release",
+			"output": {
+				"outputOnFailure": true
+			}
+		},
+		{
+			"name": "mingw",
+			"configurePreset": "mingw",
+			"output": {
+				"outputOnFailure": true
+			}
+		},
+		{
+			"name": "linux",
+			"configurePreset": "linux",
+			"output": {
+				"outputOnFailure": true
+			}
+		},
+		{
+			"name": "linux-shared",
+			"configurePreset": "linux-shared",
+			"output": {
+				"outputOnFailure": true
+			}
+		},
+		{
+			"name": "dev",
+			"configurePreset": "dev",
+			"output": {
+				"outputOnFailure": true
+			}
+		}
+	]
+}

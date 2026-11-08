@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Raven example - animations
+
+  Appear="..." makes a widget arrive with a transition; AppearDelay staggers a
+  group. The <Island> beside the content of the window floats at its top:
+  its first child is what it shows folded, its second what it unfolds into.
+-->
+<Window Title="Raven - animations" Width="960" Height="640" MinWidth="720" MinHeight="480">
+
+	<!-- a button that plays a transition on the card in the middle -->
+	<Widget Name="Play" Text="" Tip="">
+		<Button Text="{Text}" OnClicked="play.{Text}" Tooltip="{Tip}" Style="Flat"/>
+	</Widget>
+
+	<Island Name="island" Slot.Padding="0,8,0,0">
+		<HBox Spacing="8" Slot.Padding="14,6">
+			<Label Name="island.count" Text="3 cards"/>
+		</HBox>
+		<VBox Spacing="10" Slot.Padding="18,14" Width="300">
+			<Label Text="Motion" TextSize="17"/>
+			<HBox Spacing="10">
+				<Label Text="Speed" Slot.VAlign="Center" Width="60"/>
+				<Slider Name="speed" Min="0.1" Max="2" Value="1" Slot.Fill="1" OnChanged="motion.speed"/>
+				<Label Name="speed.value" Text="1.0x" Width="40" Slot.VAlign="Center"/>
+			</HBox>
+			<Checkbox Name="reduce" Text="Reduce motion" Style="Switch" OnChanged="motion.reduce"/>
+		</VBox>
+	</Island>
+
+	<HBox Spacing="14" Slot.Padding="16,56,16,16">
+		<!-- transitions -->
+		<Border Padding="12" Width="170" CornerRadius="14" Appear="FlyRight">
+			<VBox Spacing="2">
+				<Label Text="Transitions" TextSize="17" Slot.Padding="6,2,6,8"/>
+				<Play Text="Fade" Tip="Becomes opaque"/>
+				<Play Text="Pop" Tip="Grows and bounces a little past its size"/>
+				<Play Text="Zoom" Tip="Shrinks from a larger size"/>
+				<Play Text="FlyUp" Tip="Flies in from below"/>
+				<Play Text="FlyDown" Tip="Flies in from above"/>
+				<Play Text="FlyLeft" Tip="Flies in from the right"/>
+				<Play Text="FlyRight" Tip="Flies in from the left"/>
+				<Play Text="Drop" Tip="Falls, squashes on landing and wobbles"/>
+				<Play Text="SlideLeft" Tip="A page replacing another"/>
+				<Spacer Slot.Fill="1"/>
+				<Button Text="Play them all" Style="Primary" OnClicked="play.all"/>
+			</VBox>
+		</Border>
+
+		<VBox Spacing="14" Slot.Fill="1">
+			<!-- the stage -->
+			<Border Padding="16" Slot.Fill="1" CornerRadius="14" Appear="FlyDown" AppearDelay="0.08">
+				<Overlay>
+					<Border Name="card" Width="240" Height="150" Padding="18" CornerRadius="22" Shadow="26,0,10"
+						Background="#3B82F6" Slot.HAlign="Center" Slot.VAlign="Center">
+						<VBox Spacing="6" Slot.VAlign="Center">
+							<Label Name="card.title" Text="Pop" TextSize="26" Color="white" Slot.HAlign="Center"/>
+							<Label Text="Choose a transition on the left" Color="#FFFFFFC0" Slot.HAlign="Center"/>
+						</VBox>
+					</Border>
+				</Overlay>
+			</Border>
+
+			<!-- springs -->
+			<Border Padding="14" Height="190" CornerRadius="14" Appear="FlyUp" AppearDelay="0.16">
+				<VBox Spacing="8">
+					<HBox>
+						<Label Text="Springs" TextSize="17" Slot.Fill="1"/>
+						<Label Text="Move the pointer over the tracks; click to kick" Opacity="0.6" Slot.VAlign="Center"/>
+					</HBox>
+					<Custom Name="springs" Slot.Fill="1"/>
+				</VBox>
+			</Border>
+		</VBox>
+
+		<!-- cards that come and go -->
+		<Border Padding="12" Width="230" CornerRadius="14" Appear="FlyLeft" AppearDelay="0.24">
+			<VBox Spacing="8">
+				<HBox Spacing="6">
+					<Label Text="Cards" TextSize="17" Slot.Fill="1" Slot.VAlign="Center"/>
+					<Button Text="Add" Style="Primary" OnClicked="cards.add"/>
+					<Button Text="Remove" OnClicked="cards.remove"/>
+				</HBox>
+				<ScrollBox Slot.Fill="1">
+					<VBox Name="cards" Spacing="8"/>
+				</ScrollBox>
+			</VBox>
+		</Border>
+	</HBox>
+</Window>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Raven example - components
+
+  The tags Card, Stat and Badge do not exist in the library: widgets.xml
+  declares them, and this document uses them like any other.
+-->
+<Window Title="Raven - components" Width="760" Height="560" MinWidth="520" MinHeight="400">
+	<Include Source="widgets.xml"/>
+
+	<!-- a declaration can also sit in the document that uses it -->
+	<Widget Name="Row" Name2="" Role="" Online="false">
+		<HBox Spacing="8">
+			<Label Text="{Name2}" Slot.Fill="1"/>
+			<Label Text="{Role}" Opacity="0.6"/>
+			<Badge Text="{Online ? 'online' : 'away'}" Color="{Online ? '#46A758' : 'gray'}"/>
+		</HBox>
+	</Widget>
+
+	<ScrollBox>
+		<VBox Spacing="12" Slot.Padding="16">
+			<HBox Spacing="12">
+				<Label Text="Dashboard" TextSize="24" Slot.Fill="1"/>
+				<Button Text="Add a card" Style="Primary" OnClicked="cards.add" Slot.VAlign="Center"/>
+			</HBox>
+
+			<WrapBox Name="cards" Spacing="12">
+				<Card Title="Sales" Badge="hot" Appear="Pop">
+					<Stat Label="This week" Value="1 284" Trend="1"/>
+					<Stat Label="Returns" Value="37" Trend="-1"/>
+					<Button Text="Details" Style="Flat" Into="footer" OnClicked="card.details"/>
+				</Card>
+
+				<Card Title="Team" Appear="Pop" AppearDelay="0.06">
+					<Row Name2="Ada" Role="Lead" Online="true"/>
+					<Row Name2="Linus" Role="Kernel"/>
+					<Row Name2="Grace" Role="Compiler" Online="true"/>
+				</Card>
+
+				<!-- the same element several times: a count, or a list of texts -->
+				<Card Title="Servers" Badge="4" Wide="true" Appear="Pop" AppearDelay="0.12">
+					<HBox Spacing="16">
+						<Repeat Count="4" Var="i">
+							<Stat Label="node-{i + 1}" Value="{20 + i * 17} %" Trend="{i == 3 ? -1 : 0}"/>
+						</Repeat>
+					</HBox>
+					<HBox Spacing="6">
+						<Label Text="Regions:" Opacity="0.6" Slot.VAlign="Center"/>
+						<ForEach Items="paris|tokyo|oslo" Var="city" Index="n">
+							<Badge Text="{city}" Color="{n % 2 == 0 ? '#8E4EC6' : '#05A2C2'}"/>
+						</ForEach>
+					</HBox>
+					<Button Text="Restart all" Into="footer" OnClicked="card.details"/>
+					<Button Text="Logs" Style="Flat" Into="footer" OnClicked="card.details"/>
+				</Card>
+			</WrapBox>
+
+			<Label Name="status" Opacity="0.7"/>
+			<Expander Title="The XML of the cards added from C" Expanded="true">
+				<TextEditor Name="source" Language="XML" ReadOnly="true" Height="150"/>
+			</Expander>
+		</VBox>
+	</ScrollBox>
+</Window>

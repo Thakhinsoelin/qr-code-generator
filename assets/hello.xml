@@ -1,0 +1,70 @@
+<Window Title="QR Code Generator" Width="1000" Height="480">
+    <HBox Spacing="20" Slot.HAlign="Fill" Slot.VAlign="Fill" Slot.Padding="16">
+        <VBox Spacing="10" Slot.Fill="1">
+            <Label Text="QR Code Generator" TextSize="20" TextAlign="Center"/>
+
+            <VBox Spacing="4">
+                <Label Text="Text or Link:" TextSize="18"/>
+                <TextInput Placeholder="Enter URL or text ..." Name="input_text"/>
+            </VBox>
+
+            <VBox Spacing="8">
+                <Label Text="Error Correction Level:" TextSize="18"/>
+                <HBox Spacing="8">
+                    <Checkbox Text="Low" Name="low" Style="Radio"/>
+                    <Checkbox Text="Medium" Name="med" Style="Radio"/>
+                    <Checkbox Text="Quartile" Name="qua" Style="Radio"/>
+                    <Checkbox Text="High" Name="high" Style="Radio" Checked="true"/>
+                </HBox>
+            </VBox>
+
+            <HBox Spacing="8" Slot.HAlign="Left">
+                <Label Text="Border:" TextSize="18"/>
+                <SpinBox Min="1" Max="20" Value="8" Step="1" Name="border"/>
+                <Label Text="modules" TextSize="15"/>
+            </HBox>
+
+            <HBox Spacing="8" Slot.HAlign="Fill">
+                <Label Text="Scale:" TextSize="18"/>
+                <SpinBox Min="1" Max="20" Value="8" Step="1" Name="scale"/>
+                <Label Text="logical units per module (maximum)" TextSize="15"/>
+            </HBox>
+
+            <HBox Spacing="8" Slot.HAlign="Fill">
+                <Label Text="Colors:" TextSize="18"/>
+                <Label Text="Light=" TextSize="15"/>
+                <TextInput Text="#FFFFFF" Placeholder="#FFFFFF" Name="light"/>
+                <Label Text="Dark=" TextSize="15"/>
+                <TextInput Text="#000000" Placeholder="#000000" Name="dark"/>
+            </HBox>
+
+            <HBox Spacing="8" Slot.HAlign="Fill">
+                <Label Text="Version range:" TextSize="18"/>
+                <Label Text="Minimum" TextSize="15"/>
+                <SpinBox Min="1" Max="40" Value="1" Step="1" Name="vermin"/>
+                <Label Text="Maximum" TextSize="15"/>
+                <SpinBox Min="1" Max="40" Value="40" Step="1" Name="vermax"/>
+            </HBox>
+
+            <HBox Spacing="8" Slot.HAlign="Fill">
+                <Label Text="Mask pattern:" TextSize="18"/>
+                <SpinBox Min="-1" Max="7" Value="-1" Step="1" Name="maskpattern"/>
+                <Label Text="(-1 automatic, 0 to 7 manual)" TextSize="15"/>
+            </HBox>
+
+            <HBox Spacing="8" Slot.HAlign="Fill">
+                <Label Text="Boost ECC:" TextSize="18"/>
+                <Checkbox Name="boostecc"/>
+                <Label Text="Increase ECC level within the same version" TextSize="15"/>
+            </HBox>
+
+            <Button Text="Generate QR" Style="Primary" OnClicked="generate_qr"/>
+            <Label Name="status" Text="Enter text, choose options, and generate a QR code." TextSize="14" Wrap="true"/>
+        </VBox>
+
+        <VBox Spacing="10" Slot.HAlign="Center" Slot.VAlign="Center">
+            <Label Text="QR Code Preview" TextSize="20" TextAlign="Center"/>
+            <Custom Width="240" Height="240" Name="qr_canvas"/>
+        </VBox>
+    </HBox>
+</Window>

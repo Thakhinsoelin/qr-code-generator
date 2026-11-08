@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Raven example - editor.xml
+
+  A window is a tree of widgets. Tags are widget types and attributes set
+  their properties. "Slot.*" attributes tell the parent panel how to place a
+  child (Slate slots): Slot.Fill, Slot.Padding, Slot.HAlign, Slot.VAlign...
+  The names given to On...="" are actions, bound from C with Raction_bind.
+  docs/XML.md lists every tag and attribute.
+-->
+<Window Title="Raven - editor example" Width="1180" Height="720" MinWidth="640" MinHeight="420">
+	<Shortcut Keys="F5" Action="scene.play"/>
+	<Shortcut Keys="Delete" Action="scene.delete"/>
+
+	<VBox>
+		<MenuBar>
+			<Menu Text="File">
+				<MenuItem Text="New scene" Shortcut="Ctrl+N" OnClicked="scene.new"/>
+				<MenuItem Text="Add object" Shortcut="Ctrl+D" OnClicked="scene.add"/>
+				<Separator/>
+				<MenuItem Text="Quit" Shortcut="Ctrl+Q" OnClicked="app.quit"/>
+			</Menu>
+			<Menu Text="View">
+				<MenuItem Name="menu.dark" Text="Dark theme" Checkable="true" Checked="true" OnClicked="view.dark"/>
+				<MenuItem Name="menu.light" Text="Light theme" Checkable="true" OnClicked="view.light"/>
+				<MenuItem Name="menu.glass_dark" Text="Dark glass" Checkable="true" OnClicked="view.glass_dark"/>
+				<MenuItem Name="menu.glass_light" Text="Light glass" Checkable="true" OnClicked="view.glass_light"/>
+				<Separator/>
+				<Menu Text="Scale">
+					<MenuItem Text="Compact" OnClicked="view.compact"/>
+					<MenuItem Text="Comfortable" OnClicked="view.comfortable"/>
+				</Menu>
+			</Menu>
+		</MenuBar>
+
+		<!-- tool bar -->
+		<HBox Spacing="4" Slot.Padding="6,4">
+			<Button Name="play" Text="Pause" Style="Primary" MinWidth="72" OnClicked="scene.play" Tooltip="Start or stop the animation (F5)"/>
+			<Button Text="Add object" Style="Flat" OnClicked="scene.add" Tooltip="Add an object to the scene (Ctrl+D)"/>
+			<Button Text="Delete" Style="Flat" OnClicked="scene.delete" Tooltip="Delete the selected object (Delete)"/>
+			<Spacer Slot.Fill="1"/>
+			<Label Name="stats" Slot.VAlign="Center" Opacity="0.7"/>
+		</HBox>
+		<Separator/>
+
+		<!-- the three columns above the log -->
+		<Splitter Orientation="Vertical" Slot.Fill="1">
+			<Splitter Slot.Fill="3">
+
+				<VBox Slot.Fill="1" Spacing="6" Slot.Padding="8">
+					<Label TextSize="15">Outliner</Label>
+					<TreeView Name="outliner" Slot.Fill="1"/>
+				</VBox>
+
+				<TabView Slot.Fill="3">
+					<!-- Mode 1 of raven_viewport.h: the application renders into a texture -->
+					<Viewport Name="scene" Slot.Title="Scene" Realtime="true" Cursor="Crosshair"
+						Tooltip="Software-rendered on the job system. Drag to move the selected object."/>
+					<VBox Slot.Title="Profiler" Slot.Padding="12" Spacing="8">
+						<Label>Time between frames (ms)</Label>
+						<!-- drawn by the application: see graph_paint in main.c -->
+						<Custom Name="graph" Slot.Fill="1"/>
+					</VBox>
+				</TabView>
+
+				<ScrollBox Slot.Fill="1.3">
+					<VBox Spacing="10" Slot.Padding="10">
+						<Label TextSize="15">Properties</Label>
+						<Grid Columns="auto,1" Spacing="8">
+							<Label Slot.Column="0" Slot.Row="0" Slot.VAlign="Center">Name</Label>
+							<TextInput Name="prop.name" Slot.Column="1" Slot.Row="0"/>
+
+							<Label Slot.Column="0" Slot.Row="1" Slot.VAlign="Center">Radius</Label>
+							<Slider Name="prop.radius" Slot.Column="1" Slot.Row="1" Slot.VAlign="Center" Min="0.03" Max="0.4" OnChanged="prop.radius"/>
+
+							<Label Slot.Column="0" Slot.Row="2" Slot.VAlign="Center">Speed</Label>
+							<SpinBox Name="prop.speed" Slot.Column="1" Slot.Row="2" Min="-5" Max="5" Step="0.25" Decimals="2" OnChanged="prop.speed"/>
+
+							<Label Slot.Column="0" Slot.Row="3" Slot.VAlign="Center">Color</Label>
+							<ComboBox Name="prop.color" Slot.Column="1" Slot.Row="3" OnChanged="prop.color">
+								<Item Text="Orange"/><Item Text="Blue"/><Item Text="Green"/><Item Text="Pink"/>
+							</ComboBox>
+						</Grid>
+						<Checkbox Name="prop.visible" Text="Visible" OnChanged="prop.visible"/>
+
+						<Expander Title="Rendering" Expanded="true">
+							<VBox Spacing="8" Slot.Padding="0,6,0,0">
+								<Checkbox Name="render.threads" Text="Render on all cores" Style="Switch" Checked="true"/>
+								<HBox Spacing="8">
+									<Label Slot.VAlign="Center">Resolution</Label>
+									<ComboBox Name="render.scale" Slot.Fill="1" Selected="0">
+										<Item Text="Full"/><Item Text="Half"/><Item Text="Quarter"/>
+									</ComboBox>
+								</HBox>
+								<Label Name="render.info" Opacity="0.7" Wrap="true"/>
+							</VBox>
+						</Expander>
+					</VBox>
+				</ScrollBox>
+			</Splitter>
+
+			<ListView Name="log" Slot.Fill="1"/>
+		</Splitter>
+	</VBox>
+</Window>

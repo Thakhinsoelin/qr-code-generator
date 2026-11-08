@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Raven example - studio
+
+  The widgets of creative tools together: a graph of nodes, a timeline, a
+  color picker. Everything they show is written here; main.c only reacts
+  (it colors the selected nodes, refuses the links that would make a loop,
+  moves the playhead).
+
+  This file is watched while the example runs: change a title, a color, a
+  position, save, and the window follows. What the file did not change stays
+  as it is (its state, its scroll, what you typed); a widget whose content
+  changed is built again.
+-->
+<Window Title="Raven - studio" Width="1280" Height="800" MinWidth="900" MinHeight="560">
+	<VBox>
+		<HBox Spacing="10" Slot.Padding="12,8,12,8">
+			<Label Text="Studio" TextSize="17" Slot.VAlign="Center"/>
+			<Spacer Width="12"/>
+			<Button Name="play" Text="Play" Style="Primary" OnClicked="studio.play"/>
+			<Label Name="time" Text="0:00" Font="monospace" Slot.VAlign="Center" Width="76"/>
+			<Button Text="Add a node" OnClicked="studio.add"/>
+			<Button Text="Show all" Style="Flat" OnClicked="studio.frame" Tooltip="Every node in view (F, or a double click on the canvas)"/>
+			<Spacer Slot.Fill="1"/>
+			<Label Text="Theme" Slot.VAlign="Center" Opacity="0.7"/>
+			<ComboBox Name="theme" Items="Dark|Light|Glass dark|Glass light" Selected="0" Width="140" OnChanged="studio.theme"/>
+		</HBox>
+		<Separator/>
+		<Splitter Orientation="Vertical" Slot.Fill="1">
+			<HBox Slot.Fill="5">
+				<NodeGraph Name="graph" Slot.Fill="1" Slot.Padding="10,10,0,6">
+					<Type Name="vector" Color="#BF5AF2"/>
+					<Type Name="number" Color="#64D2FF"/>
+					<Type Name="color" Color="#FFD60A"/>
+
+					<Node Name="uv" Title="Texture coordinates" X="40" Y="60" Color="#FF375F">
+						<Output Name="uv" Label="UV" Type="vector"/>
+					</Node>
+					<Node Name="time" Title="Time" X="60" Y="260" Color="#30D158">
+						<Output Name="seconds" Label="Seconds" Type="number"/>
+					</Node>
+					<Node Name="noise" Title="Noise" X="300" Y="40" Color="#FF9F0A">
+						<Input Name="uv" Label="UV" Type="vector"/>
+						<Input Name="scale" Label="Scale" Type="number"/>
+						<Output Name="value" Label="Value" Type="number"/>
+						<Slider Value="0.4" Width="150" Tooltip="Detail"/>
+					</Node>
+					<Node Name="mix" Title="Multiply" X="330" Y="290" Color="#BF5AF2">
+						<Input Name="a" Label="A" Type="number"/>
+						<Input Name="b" Label="B" Type="number"/>
+						<Output Name="out" Label="Result" Type="number"/>
+					</Node>
+					<Node Name="ramp" Title="Color ramp" X="560" Y="120" Color="#0A84FF">
+						<Input Name="t" Label="Factor" Type="number"/>
+						<Output Name="color" Label="Color" Type="color"/>
+						<Output Name="alpha" Label="Alpha" Type="number"/>
+						<ComboBox Items="Linear|Ease|Constant" Selected="0"/>
+						<Checkbox Text="Clamp" Checked="true"/>
+					</Node>
+					<Node Name="out" Title="Surface" X="860" Y="90">
+						<Input Name="base" Label="Base color" Type="color"/>
+						<Input Name="rough" Label="Roughness" Type="number"/>
+						<Input Name="any" Label="Anything"/>
+					</Node>
+
+					<Link From="uv.uv" To="noise.uv"/>
+					<Link From="noise.value" To="ramp.t"/>
+					<Link From="ramp.color" To="out.base"/>
+					<Link From="time.seconds" To="mix.a"/>
+					<Link From="noise.value" To="mix.b"/>
+					<Link From="mix.out" To="out.rough"/>
+				</NodeGraph>
+
+				<ScrollBox Width="312">
+				<VBox Spacing="10" Slot.Padding="14,12,14,8">
+					<Label Name="selected" Text="No node selected" TextSize="16" Wrap="true"/>
+					<Label Text="Color of the selected nodes" Opacity="0.6"/>
+					<ColorPicker Name="tint" Color="#0A84FF" Alpha="false" OnChanged="studio.tint"
+						Swatches="#FF375F,#FF9F0A,#FFD60A,#30D158,#64D2FF,#0A84FF,#BF5AF2,#8E8E93"/>
+					<Separator/>
+					<Label Markdown="true" Wrap="true" Opacity="0.85">
+						- **Drag** a pin to another to link them; drag the end of a link away to remove it.
+						- The **wheel** zooms, the **middle button** (or `Alt` + drag) moves the canvas.
+						- A link that would make a **loop** is refused by the application.
+						- `Delete` removes what is selected.
+					</Label>
+				</VBox>
+				</ScrollBox>
+			</HBox>
+
+			<Timeline Name="timeline" Duration="12" FrameRate="24" Time="2.5" Slot.Fill="3" Slot.Padding="10,6,10,10">
+				<Track Name="Camera" Color="#0A84FF">
+					<Clip Start="0" Length="3.5" Label="Wide shot"/>
+					<Clip Start="4" Length="4" Label="Travelling"/>
+					<Clip Start="8.5" End="12" Label="Close up"/>
+				</Track>
+				<Track Name="Character" Color="#30D158">
+					<Clip Start="0.5" Length="5" Label="Walk"/>
+					<Clip Start="5.5" Length="2" Label="Jump"/>
+					<Key Time="8.5"/><Key Time="9.25"/><Key Time="10" Label="Land"/>
+				</Track>
+				<Track Name="Noise scale" Color="#FF9F0A">
+					<Key Time="1"/><Key Time="3"/><Key Time="3.5"/><Key Time="6"/><Key Time="10.5"/>
+				</Track>
+				<Track Name="Audio" Color="#BF5AF2">
+					<Clip Start="0" Length="12" Label="Music"/>
+				</Track>
+				<Marker Time="4" Label="Intro"/>
+				<Marker Time="8.5" Label="Act 2" Color="#FF9F0A"/>
+			</Timeline>
+		</Splitter>
+	</VBox>
+</Window>

@@ -1,0 +1,18 @@
+*.pyc
+.vs/
+.vscode/
+CMakeSettings.json
+CMakeUserPresets.json
+__pycache__/
+build-*/
+build/
+dist/
+dist-release/
+out/
+dev/
+*.patch
+
+# build outputs of the bindings (.NET, Cargo)
+bindings/**/bin/
+bindings/**/obj/
+target/

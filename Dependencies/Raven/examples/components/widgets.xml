@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  A file of declarations: each <Widget Name="..."> is a new tag. The other
+  attributes of <Widget> are its parameters, with their default values;
+  inside it, {...} is computed from them.
+
+  This file is brought in by components.xml with <Include Source="widgets.xml"/>;
+  an application can also read it once with Rxml_register_widgets_from_file.
+-->
+<Widgets>
+	<!-- a small colored label -->
+	<Widget Name="Badge" Text="new" Color="#3B82F6">
+		<Border Background="{Color}" CornerRadius="100" Padding="8,2" Slot.VAlign="Center">
+			<Label Text="{upper(Text)}" TextSize="11" Color="white"/>
+		</Border>
+	</Widget>
+
+	<!-- a number with its name; Trend colors the number ("less than" is written &lt; in XML) -->
+	<Widget Name="Stat" Label="" Value="0" Trend="0">
+		<VBox Spacing="2">
+			<Label Text="{Label}" Opacity="0.6" TextSize="12"/>
+			<Label Text="{Value}" TextSize="24" Color="{Trend > 0 ? '#46A758' : Trend &lt; 0 ? '#E5484D' : 'gray'}"/>
+		</VBox>
+	</Widget>
+
+	<!--
+	  A card: a title, an optional badge, and whatever the user of the tag puts
+	  inside it (<Children/>). What is marked Into="footer" goes to the named
+	  place instead. A tag can use the tags declared before it.
+	-->
+	<Widget Name="Card" Title="Untitled" Badge="" Wide="false">
+		<Border Padding="14" CornerRadius="14" Width="{Wide ? 452 : 220}">
+			<VBox Spacing="8">
+				<HBox Spacing="8">
+					<Label Text="{Title}" TextSize="16" Slot.Fill="1" Slot.VAlign="Center"/>
+					<Badge If="{!empty(Badge)}" Text="{Badge}" Color="{Badge == 'hot' ? '#E5484D' : '#3B82F6'}"/>
+				</HBox>
+				<Separator/>
+				<Children/>
+				<HBox Spacing="6" Slot.HAlign="Right">
+					<Children Name="footer"/>
+				</HBox>
+			</VBox>
+		</Border>
+	</Widget>
+</Widgets>

@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Raven manual: XML reference</title>
+<meta name="description" content="Every XML tag and attribute of Raven interfaces.">
+<link rel="canonical" href="https://oscar-soirey.github.io/Raven/xml.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Raven">
+<meta property="og:title" content="Raven manual: XML reference">
+<meta property="og:description" content="Every XML tag and attribute of Raven interfaces.">
+<meta property="og:url" content="https://oscar-soirey.github.io/Raven/xml.html">
+<meta property="og:image" content="https://oscar-soirey.github.io/Raven/images/studio_glass.png">
+<meta property="og:image:alt" content="Raven, a native GUI library in C: the studio example">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Raven manual: XML reference">
+<meta name="twitter:description" content="Every XML tag and attribute of Raven interfaces.">
+<meta name="twitter:image" content="https://oscar-soirey.github.io/Raven/images/studio_glass.png">
+<meta name="theme-color" content="#e5322d">
+<link rel="icon" type="image/png" href="logo-com-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@500;700&family=JetBrains+Mono:wght@400;600&family=Newsreader:opsz,wght@6..72,400;6..72,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<div class="topbar"><button id="menu" aria-controls="side" aria-expanded="false">Menu</button><a class="brand" href="index.html"><img src="logo-com-192.png" alt="" width="34" height="34">Raven</a></div>
+<div class="layout">
+<aside class="side" id="side"><a class="brand" href="index.html"><img src="logo-com-192.png" alt="" width="34" height="34">Raven</a><p class="label">Documentation</p><ul class="pages"><li><a href="guide.html">Guide</a></li><li><a href="xml.html" aria-current="page">XML reference</a><ul class="sections"><li><a href="#loading">1. Loading a document</a></li><li><a href="#syntax">2. Rules of the syntax</a></li><li><a href="#values">3. Kinds of values</a></li><li><a href="#actions">4. Actions</a></li><li><a href="#common">5. Attributes every widget has</a></li><li><a href="#shell">6. Windows and their shell</a></li><li><a href="#panels">7. Panels</a></li><li><a href="#controls">8. Controls</a></li><li><a href="#tools">9. Tools</a></li><li><a href="#elements">10. Elements that are not widgets</a></li><li><a href="#strings">11. Translations</a></li><li><a href="#markdown">12. Markdown</a></li><li><a href="#declared">13. Declaring tags</a></li><li><a href="#reload">14. Files that are loaded again</a></li><li><a href="#bycode">15. Tags made by code; WebView</a></li><li><a href="#documents">16. Documents, for tools</a></li></ul></li><li><a href="designer.html">Designer</a></li><li><a href="reference.html">C API reference</a></li><li><a href="bindings.html">Bindings</a></li><li><a href="qt-to-raven.html">From Qt to Raven</a></li></ul><p class="label">Elsewhere</p><ul class="extra"><li><a href="index.html">Home</a></li><li><a href="index.html#releases">Downloads</a></li><li><a href="https://github.com/oscar-soirey/Raven">GitHub</a></li></ul></aside>
+<main class="doc"><article>
+<h1>XML reference</h1>
+
+<p>A window, or any part of one, can be written in XML. The XML only
+<i>builds</i> the tree of widgets: once loaded, every element is an ordinary
+widget, found with <code><a href="reference.html#Rwidget_find">Rwidget_find</a></code> and driven with the C API. Everything the XML
+says can also be said from C, and the other way round.</p>
+
+<p>This page lists 44 tags of the library, 194 attributes of their own, and 102 attributes every widget can take. The tables come from the library itself
+(<code><a href="reference.html#Rxml_get_attribute_info">Rxml_get_attribute_info</a></code>), so they are exactly what the loader understands.</p>
+
+<h2 id="contents">Contents</h2>
+<ol>
+<li><a href="#loading">Loading a document</a></li>
+<li><a href="#syntax">Rules of the syntax</a></li>
+<li><a href="#values">Kinds of values</a></li>
+<li><a href="#actions">Actions</a></li>
+<li><a href="#common">Attributes every widget has</a> &mdash;
+  <a href="#widget-attributes">widget</a> &middot; <a href="#slot-attributes">slot</a> &middot;
+  <a href="#color-attributes">colors</a> &middot; <a href="#metric-attributes">metrics</a></li>
+<li><a href="#shell">Windows and their shell</a> &mdash; <a href="#tag-Window">Window</a> &middot; <a href="#tag-HeaderBar">HeaderBar</a> &middot; <a href="#tag-DockArea">DockArea</a> &middot; <a href="#tag-Island">Island</a> &middot; <a href="#tag-MenuBar">MenuBar</a> &middot; <a href="#tag-Menu">Menu</a> &middot; <a href="#tag-MenuItem">MenuItem</a></li>
+<li><a href="#panels">Panels</a> &mdash; <a href="#tag-VBox">VBox</a> &middot; <a href="#tag-HBox">HBox</a> &middot; <a href="#tag-Grid">Grid</a> &middot; <a href="#tag-UniformGrid">UniformGrid</a> &middot; <a href="#tag-Overlay">Overlay</a> &middot; <a href="#tag-Border">Border</a> &middot; <a href="#tag-SizeBox">SizeBox</a> &middot; <a href="#tag-Spacer">Spacer</a> &middot; <a href="#tag-ScrollBox">ScrollBox</a> &middot; <a href="#tag-Splitter">Splitter</a> &middot; <a href="#tag-WrapBox">WrapBox</a> &middot; <a href="#tag-Canvas">Canvas</a> &middot; <a href="#tag-Switcher">Switcher</a> &middot; <a href="#tag-TabView">TabView</a> &middot; <a href="#tag-Expander">Expander</a> &middot; <a href="#tag-BackgroundBlur">BackgroundBlur</a></li>
+<li><a href="#controls">Controls</a> &mdash; <a href="#tag-Label">Label</a> &middot; <a href="#tag-Button">Button</a> &middot; <a href="#tag-Checkbox">Checkbox</a> &middot; <a href="#tag-Slider">Slider</a> &middot; <a href="#tag-ProgressBar">ProgressBar</a> &middot; <a href="#tag-Image">Image</a> &middot; <a href="#tag-TextInput">TextInput</a> &middot; <a href="#tag-SpinBox">SpinBox</a> &middot; <a href="#tag-ComboBox">ComboBox</a> &middot; <a href="#tag-Separator">Separator</a> &middot; <a href="#tag-ListView">ListView</a> &middot; <a href="#tag-TreeView">TreeView</a> &middot; <a href="#tag-TileView">TileView</a> &middot; <a href="#tag-TextEditor">TextEditor</a></li>
+<li><a href="#tools">Tools</a> &mdash; <a href="#tag-ColorPicker">ColorPicker</a> &middot; <a href="#tag-Timeline">Timeline</a> &middot; <a href="#tag-NodeGraph">NodeGraph</a> &middot; <a href="#tag-BlockEditor">BlockEditor</a> &middot; <a href="#tag-FileBrowser">FileBrowser</a> &middot; <a href="#tag-Viewport">Viewport</a> &middot; <a href="#tag-Custom">Custom</a></li>
+<li><a href="#elements">Elements that are not widgets</a></li>
+<li><a href="#strings">Translations</a></li>
+<li><a href="#markdown">Markdown</a></li>
+<li><a href="#declared">Declaring tags</a></li>
+<li><a href="#reload">Files that are loaded again</a></li>
+<li><a href="#bycode">Tags made by code; WebView</a></li>
+<li><a href="#documents">Documents, for tools</a></li>
+</ol>
+
+<h2 id="loading">1. Loading a document</h2>
+
+<pre>Rid window = <a href="reference.html#Rwindow_create_from_xml_file">Rwindow_create_from_xml_file</a>("editor.xml");        /* the root is &lt;Window&gt; */
+Rid panel  = <a href="reference.html#Rwidget_create_from_xml">Rwidget_create_from_xml</a>(text, strlen(text));       /* any widget as the root */
+Rid other  = <a href="reference.html#Rwindow_create_from_xml">Rwindow_create_from_xml</a>(text, strlen(text));       /* a &lt;Window&gt; given as text */
+
+Rid save = <a href="reference.html#Rwidget_find">Rwidget_find</a>(window, "save");                        /* Name="save" */
+<a href="reference.html#Rbutton_set_text">Rbutton_set_text</a>(save, "Save all");
+<a href="reference.html#Rwidget_set_attribute">Rwidget_set_attribute</a>(save, "Style", "Primary");                /* any attribute, as text */</pre>
+
+<p>A document read from a file is watched: when it is saved, the window
+follows (see <a href="#reload">Files that are loaded again</a>). A text given
+from memory is not. Paths written in a document given as text are relative
+to <code><a href="reference.html#Rxml_set_base_path">Rxml_set_base_path</a></code>.</p>
+
+<p>A complete small window:</p>
+
+<pre>&lt;Window Title="Tool" Width="800" Height="500"&gt;
+    &lt;Shortcut Keys="Ctrl+S" Action="file.save"/&gt;
+    &lt;VBox Spacing="8" Slot.Padding="12"&gt;
+        &lt;Label TextSize="18"&gt;Settings&lt;/Label&gt;
+        &lt;HBox Spacing="8"&gt;
+            &lt;TextInput Name="path" Placeholder="Folder..." Slot.Fill="1"/&gt;
+            &lt;Button Text="Save" Style="Primary" OnClicked="file.save"/&gt;
+        &lt;/HBox&gt;
+        &lt;ListView Name="files" Slot.Fill="1"/&gt;
+    &lt;/VBox&gt;
+&lt;/Window&gt;</pre>
+
+<h2 id="syntax">2. Rules of the syntax</h2>
+<ul>
+<li>Tags are widget types; attributes are their properties. Names of tags and attributes are not case sensitive.</li>
+<li>Elements, attributes, text, comments, CDATA, the five entities (<code>&amp;amp; &amp;lt; &amp;gt; &amp;quot; &amp;apos;</code>) and numeric character references are understood. Files are UTF-8. There is no DTD and no namespace.</li>
+<li>Inside an attribute, <code>&lt;</code> and <code>&amp;</code> are written <code>&amp;lt;</code> and <code>&amp;amp;</code>: <code>If="{Count &amp;lt; 3}"</code>.</li>
+<li>The text inside an element is its <code>Text</code> attribute: <code>&lt;Label&gt;Hello&lt;/Label&gt;</code> is <code>&lt;Label Text="Hello"/&gt;</code>.</li>
+<li>Children are created first, then the attributes of their parent are applied, so <code>Selected="1"</code> or <code>ActiveTab="2"</code> can refer to children.</li>
+<li>An unknown tag or attribute, or a wrong value, is reported through the error callback (<code><a href="reference.html#R_ERROR_XML">R_ERROR_XML</a></code>, with its line and column) and loading goes on.</li>
+<li>Paths (<code>Source</code>, <code>Font</code>, <code>Background</code>...) are relative to the file, and a file is loaded once and shared by every widget that names it.</li>
+<li>Lengths are logical units: they are multiplied by the scale of the monitor.</li>
+</ul>
+
+<h2 id="values">3. Kinds of values</h2>
+<div class="tw"><table>
+<tr><th>Kind</th><th>Written</th></tr>
+<tr><td>text</td><td>anything; a text that starts with <code>@</code> is a key of the translations (<a href="#strings">section 11</a>)</td></tr>
+<tr><td>number</td><td><code>12</code>, <code>0.5</code>, <code>-3</code>: always with a dot, whatever the language of the system</td></tr>
+<tr><td>boolean</td><td><code>true</code> / <code>false</code>, <code>yes</code> / <code>no</code>, <code>1</code> / <code>0</code></td></tr>
+<tr><td>color</td><td><code>#RGB</code>, <code>#RGBA</code>, <code>#RRGGBB</code>, <code>#RRGGBBAA</code>, or <code>transparent white black red green blue yellow orange cyan magenta gray</code></td></tr>
+<tr><td>numbers</td><td>separated by commas. A margin: <code>8</code> (all sides), <code>8,4</code> (horizontal, vertical), <code>1,2,3,4</code> (left, top, right, bottom)</td></tr>
+<tr><td>list</td><td>texts separated by <code>|</code>: <code>Items="One|Two|Three"</code></td></tr>
+<tr><td>choice</td><td>one of the words given in the tables</td></tr>
+<tr><td>file path</td><td>relative to the document</td></tr>
+<tr><td>action name</td><td>any text: <code>file.save</code> (see <a href="#actions">actions</a>)</td></tr>
+<tr><td>shortcut</td><td><code>Ctrl+S</code>, <code>Ctrl+Shift+Z</code>, <code>F5</code>, <code>Alt+Enter</code>. Modifiers <code>Ctrl Shift Alt Super</code>; keys: a letter, a digit, <code>F1</code>..<code>F12</code>, <code>Space Escape Enter Tab Backspace Insert Delete Left Right Up Down PageUp PageDown Home End</code></td></tr>
+</table></div>
+
+<h2 id="actions">4. Actions</h2>
+
+<p>A widget has one action, the name of what its main event does. <code>Action</code>,
+<code>OnClicked</code>, <code>OnChanged</code>, <code>OnCommitted</code> and <code>OnActivated</code> are five spellings
+of it, kept for readability.</p>
+
+<div class="tw"><table>
+<tr><th>Widget</th><th>The action fires when</th></tr>
+<tr><td>Button, MenuItem</td><td>it is clicked</td></tr>
+<tr><td>Checkbox, Slider, SpinBox, ComboBox, TabView, Expander, ColorPicker, Timeline, NodeGraph</td><td>its value changes</td></tr>
+<tr><td>TextInput</td><td>Enter is pressed</td></tr>
+<tr><td>ListView, TreeView, TileView</td><td>a row is activated (double click or Enter)</td></tr>
+</table></div>
+
+<pre>static void on_save(Rid sender, const char* action, void* user_data) {
+    /* sender: the widget, action: "file.save" */
+}
+
+<a href="reference.html#Raction_bind">Raction_bind</a>("file.save", on_save, NULL);
+<a href="reference.html#Raction_set_default_handler">Raction_set_default_handler</a>(on_any_action, NULL);   /* everything that has no binding of its own */
+<a href="reference.html#Raction_fire">Raction_fire</a>("file.save", <a href="reference.html#R_INVALID_ID">R_INVALID_ID</a>);            /* as if a widget had fired it */</pre>
+
+<p>The typed callbacks of the C API (<code><a href="reference.html#Rbutton_set_clicked_callback">Rbutton_set_clicked_callback</a></code>,
+<code><a href="reference.html#Rtext_input_set_changed_callback">Rtext_input_set_changed_callback</a></code> for every keystroke,
+<code><a href="reference.html#Rlist_view_set_selection_changed_callback">Rlist_view_set_selection_changed_callback</a></code>...) work beside actions and cover
+the other events.</p>
+
+<h2 id="common">5. Attributes every widget has</h2>
+
+<p>Every tag below also takes these. The slot attributes are read by the
+parent: each panel uses those that make sense for it (a <code>VBox</code> reads
+<code>Slot.Fill</code> and <code>Slot.HAlign</code>, a <code>Grid</code> reads <code>Slot.Column</code>...). The color and
+metric attributes override the theme for the widget and what it contains;
+with a glass theme, the alpha of a color is the strength of the tint of the
+glass (<code>Color.Control="#FF375F60"</code> is a pink glass button).</p>
+
+<h3 id="widget-attributes">Attributes of every widget</h3>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Name</code></td><td>text</td><td>Name of the widget, for <a href="reference.html#Rwidget_find">Rwidget_find</a>.</td></tr>
+<tr><td><code>Width</code></td><td>number</td><td>Fixed width; a negative value lets the content decide.</td></tr>
+<tr><td><code>Height</code></td><td>number</td><td>Fixed height; a negative value lets the content decide.</td></tr>
+<tr><td><code>MinWidth</code></td><td>number</td><td>The width never goes below this.</td></tr>
+<tr><td><code>MinHeight</code></td><td>number</td><td>The height never goes below this.</td></tr>
+<tr><td><code>MaxWidth</code></td><td>number</td><td>The width never goes above this.</td></tr>
+<tr><td><code>MaxHeight</code></td><td>number</td><td>The height never goes above this.</td></tr>
+<tr><td><code>Visibility</code></td><td><code>Visible</code> | <code>Hidden</code> | <code>Collapsed</code></td><td>Hidden keeps the place of the widget, Collapsed gives it back.</td></tr>
+<tr><td><code>Enabled</code></td><td>boolean</td><td>A disabled widget is dimmed and does not react.</td></tr>
+<tr><td><code>Opacity</code></td><td>number</td><td>From 0 (invisible) to 1.</td></tr>
+<tr><td><code>Material</code></td><td><code>Default</code> | <code>Solid</code> | <code>Glass</code> | <code>FrostedGlass</code> | <code>TintedGlass</code></td><td>What the surface of the widget is made of; Default follows the theme.</td></tr>
+<tr><td><code>Tooltip</code></td><td>text</td><td>Text shown when the pointer rests on the widget.</td></tr>
+<tr><td><code>Cursor</code></td><td><code>Arrow</code> | <code>IBeam</code> | <code>Hand</code> | <code>Crosshair</code> | <code>ResizeH</code> | <code>ResizeV</code> | <code>ResizeNWSE</code> | <code>ResizeNESW</code> | <code>Move</code> | <code>NotAllowed</code> | <code>None</code></td><td>Pointer shown over the widget.</td></tr>
+<tr><td><code>Appear</code></td><td><code>None</code> | <code>Fade</code> | <code>Pop</code> | <code>Zoom</code> | <code>FlyUp</code> | <code>FlyDown</code> | <code>FlyLeft</code> | <code>FlyRight</code> | <code>Drop</code> | <code>SlideLeft</code> | <code>SlideRight</code></td><td>How the widget comes in when it is first shown.</td></tr>
+<tr><td><code>AppearDelay</code></td><td>number</td><td>Seconds before the widget comes in.</td></tr>
+<tr><td><code>Action</code></td><td>action name</td><td>Name of the action the widget fires.</td></tr>
+<tr><td><code>HitTestable</code></td><td>boolean</td><td>false lets the pointer through to what is behind.</td></tr>
+<tr><td><code>Focusable</code></td><td>boolean</td><td>Can take the keyboard.</td></tr>
+<tr><td><code>Clip</code></td><td>boolean</td><td>Cuts what is inside at the bounds of the widget.</td></tr>
+<tr><td><code>WindowDrag</code></td><td>boolean</td><td>Dragging the widget moves the window (custom header).</td></tr>
+<tr><td><code>Class</code></td><td>text</td><td>Style classes of the widget, separated by spaces: the styles of the theme that name one of them apply.</td></tr>
+<tr><td><code>Theme</code></td><td><code>Default</code> | <code>Dark</code> | <code>Light</code> | <code>GlassDark</code> | <code>GlassLight</code> | <code>HighContrastDark</code> | <code>HighContrastLight</code></td><td>Theme of the widget and of what it contains: a name, or a theme file; Default follows what is around.</td></tr>
+<tr><td><code>Direction</code></td><td><code>Inherit</code> | <code>LTR</code> | <code>RTL</code></td><td>Right to left: the children placed as in a mirror, the texts aligned on the right (raven_layout.h).</td></tr>
+<tr><td><code>AccessibleName</code></td><td>text</td><td>What a screen reader says of the widget (its text by default).</td></tr>
+<tr><td><code>AccessibleDescription</code></td><td>text</td><td>A longer explanation, read after the name.</td></tr>
+<tr><td><code>AccessibleRole</code></td><td><code>Auto</code> | <code>None</code> | <code>Group</code> | <code>Text</code> | <code>Heading</code> | <code>Link</code> | <code>Button</code> | <code>ToggleButton</code> | <code>CheckBox</code> | <code>RadioButton</code> | <code>Slider</code> | <code>ProgressBar</code> | <code>SpinButton</code> | <code>TextField</code> | <code>Document</code> | <code>ComboBox</code> | <code>List</code> | <code>ListItem</code> | <code>Tree</code> | <code>TreeItem</code> | <code>Table</code> | <code>MenuBar</code> | <code>Menu</code> | <code>MenuItem</code> | <code>TabList</code> | <code>Tab</code> | <code>TabPanel</code> | <code>Toolbar</code> | <code>StatusBar</code> | <code>Dialog</code> | <code>Alert</code> | <code>Image</code> | <code>Canvas</code> | <code>Separator</code> | <code>ScrollBar</code> | <code>Pane</code></td><td>What the widget is for a screen reader.</td></tr>
+<tr><td><code>AccessibleHidden</code></td><td>boolean</td><td>Hidden from screen readers, with what it contains (decoration).</td></tr>
+</table></div>
+<h3 id="slot-attributes">Slot attributes: the place of a widget in its parent</h3>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Slot.Fill</code></td><td>number</td><td>Share of the free space of the panel the widget takes; 0 keeps its own size.</td></tr>
+<tr><td><code>Slot.Padding</code></td><td>numbers, comma separated</td><td>Space around the widget: one number, "x,y" or "left,top,right,bottom".</td></tr>
+<tr><td><code>Slot.HAlign</code></td><td><code>Fill</code> | <code>Left</code> | <code>Center</code> | <code>Right</code></td><td>Where the widget sits across its place.</td></tr>
+<tr><td><code>Slot.VAlign</code></td><td><code>Fill</code> | <code>Top</code> | <code>Center</code> | <code>Bottom</code></td><td>Where the widget sits down its place.</td></tr>
+<tr><td><code>Slot.Auto</code></td><td>boolean</td><td>Takes its own size (the opposite of Slot.Fill).</td></tr>
+<tr><td><code>Slot.MaxSize</code></td><td>number</td><td>The most a filling widget takes along the panel.</td></tr>
+<tr><td><code>Slot.Column</code></td><td>number</td><td>Grid: column, from 0.</td></tr>
+<tr><td><code>Slot.Row</code></td><td>number</td><td>Grid: row, from 0.</td></tr>
+<tr><td><code>Slot.ColumnSpan</code></td><td>number</td><td>Grid: number of columns taken.</td></tr>
+<tr><td><code>Slot.RowSpan</code></td><td>number</td><td>Grid: number of rows taken.</td></tr>
+<tr><td><code>Slot.Anchors</code></td><td>numbers, comma separated</td><td>Canvas: "x,y" or "minx,miny,maxx,maxy", from 0 to 1 across the canvas.</td></tr>
+<tr><td><code>Slot.Position</code></td><td>numbers, comma separated</td><td>Canvas: "x,y" from the anchor.</td></tr>
+<tr><td><code>Slot.Size</code></td><td>numbers, comma separated</td><td>Canvas: "width,height".</td></tr>
+<tr><td><code>Slot.Alignment</code></td><td>numbers, comma separated</td><td>Canvas: "x,y", the point of the widget placed at the position, from 0 to 1.</td></tr>
+<tr><td><code>Slot.Title</code></td><td>text</td><td>Title of the tab or of the docked panel that holds the widget.</td></tr>
+<tr><td><code>Slot.Dock</code></td><td><code>Left</code> | <code>Right</code> | <code>Top</code> | <code>Bottom</code> | <code>Tab</code></td><td>DockArea: the side of the area, or of Slot.DockTo, the panel takes.</td></tr>
+<tr><td><code>Slot.DockTo</code></td><td>text</td><td>DockArea: name of the panel the panel is placed against.</td></tr>
+<tr><td><code>Slot.DockSize</code></td><td>number</td><td>DockArea: share of the place it is cut from, between 0 and 1.</td></tr>
+<tr><td><code>Slot.Closable</code></td><td>boolean</td><td>DockArea: the tab has a close button.</td></tr>
+</table></div>
+<h3 id="color-attributes">Color attributes: <code>Color.&lt;Role&gt;</code></h3>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Color.Window</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.Panel</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.Border</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.Text</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.TextDisabled</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.TextPlaceholder</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.Accent</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.AccentHovered</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.AccentPressed</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.AccentText</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.Control</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.ControlHovered</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.ControlPressed</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.ControlBorder</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.Input</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.Focus</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.Selection</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.RowHovered</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.Track</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.Handle</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.HandleHovered</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.Separator</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.Header</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.HeaderHovered</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.TabActive</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.Popup</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.PopupBorder</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.Shadow</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.Tooltip</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.TooltipText</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.Switch</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.Success</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.Warning</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.Danger</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.Link</code></td><td>color</td><td></td></tr>
+<tr><td><code>Color.Code</code></td><td>color</td><td></td></tr>
+</table></div>
+<h3 id="metric-attributes">Metric attributes: <code>Metric.&lt;Name&gt;</code></h3>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Metric.FontSize</code></td><td>number</td><td></td></tr>
+<tr><td><code>Metric.CornerRadius</code></td><td>number</td><td></td></tr>
+<tr><td><code>Metric.BorderWidth</code></td><td>number</td><td></td></tr>
+<tr><td><code>Metric.ControlHeight</code></td><td>number</td><td></td></tr>
+<tr><td><code>Metric.PaddingX</code></td><td>number</td><td></td></tr>
+<tr><td><code>Metric.PaddingY</code></td><td>number</td><td></td></tr>
+<tr><td><code>Metric.Spacing</code></td><td>number</td><td></td></tr>
+<tr><td><code>Metric.ScrollbarSize</code></td><td>number</td><td></td></tr>
+<tr><td><code>Metric.RowHeight</code></td><td>number</td><td></td></tr>
+<tr><td><code>Metric.Indent</code></td><td>number</td><td></td></tr>
+<tr><td><code>Metric.SplitterSize</code></td><td>number</td><td></td></tr>
+<tr><td><code>Metric.CheckSize</code></td><td>number</td><td></td></tr>
+<tr><td><code>Metric.SliderHandleSize</code></td><td>number</td><td></td></tr>
+<tr><td><code>Metric.PopupRadius</code></td><td>number</td><td></td></tr>
+<tr><td><code>Metric.GlassFrost</code></td><td>number</td><td></td></tr>
+<tr><td><code>Metric.GlassRefraction</code></td><td>number</td><td></td></tr>
+<tr><td><code>Metric.GlassSaturation</code></td><td>number</td><td></td></tr>
+<tr><td><code>Metric.GlassRim</code></td><td>number</td><td></td></tr>
+<tr><td><code>Metric.GlassShadow</code></td><td>number</td><td></td></tr>
+<tr><td><code>Metric.BlurRadius</code></td><td>number</td><td></td></tr>
+</table></div>
+
+<h3>Which panel reads which slot attribute</h3>
+<div class="tw"><table>
+<tr><th>Slot attribute</th><th>Read by</th></tr>
+<tr><td><code>Slot.Padding</code></td><td>every panel, and the window for its content</td></tr>
+<tr><td><code>Slot.HAlign</code></td><td>VBox, Grid, Overlay, Border, SizeBox, ScrollBox, Switcher, window content</td></tr>
+<tr><td><code>Slot.VAlign</code></td><td>HBox, Grid, Overlay, Border, SizeBox, ScrollBox, Switcher, window content</td></tr>
+<tr><td><code>Slot.Fill</code>, <code>Slot.Auto</code>, <code>Slot.MaxSize</code></td><td>VBox, HBox (<code>Slot.Fill</code>: also the panes of a Splitter)</td></tr>
+<tr><td><code>Slot.Column</code>, <code>Slot.Row</code>, <code>Slot.ColumnSpan</code>, <code>Slot.RowSpan</code></td><td>Grid, UniformGrid</td></tr>
+<tr><td><code>Slot.Anchors</code>, <code>Slot.Position</code>, <code>Slot.Size</code>, <code>Slot.Alignment</code></td><td>Canvas</td></tr>
+<tr><td><code>Slot.Title</code></td><td>TabView, DockArea</td></tr>
+<tr><td><code>Slot.Dock</code>, <code>Slot.DockTo</code>, <code>Slot.DockSize</code>, <code>Slot.Closable</code></td><td>DockArea</td></tr>
+</table></div>
+
+<h2 id="shell">6. Windows and their shell</h2>
+
+<p><code>&lt;Window&gt;</code> is only a root, read by <code><a href="reference.html#Rwindow_create_from_xml_file">Rwindow_create_from_xml_file</a></code>
+and <code><a href="reference.html#Rwindow_create_from_xml">Rwindow_create_from_xml</a></code>. It holds one widget, its content; optionally an
+<code>&lt;Island&gt;</code> that floats at its top; any number of <code>&lt;Shortcut&gt;</code> and
+<code>&lt;Widget&gt;</code> declarations.</p>
+
+<pre>&lt;Window Title="Tool" Width="1100" Height="720" CustomHeader="true" Theme="GlassDark"&gt;
+    &lt;Shortcut Keys="Ctrl+S" Action="file.save"/&gt;
+    &lt;Island&gt;
+        &lt;Label Text="Ready"/&gt;                                &lt;!-- folded   --&gt;
+        &lt;VBox Spacing="6" Slot.Padding="12"&gt;                 &lt;!-- unfolded --&gt;
+            &lt;Label Text="Build finished"/&gt;
+            &lt;Button Text="Run" OnClicked="run"/&gt;
+        &lt;/VBox&gt;
+    &lt;/Island&gt;
+    &lt;VBox&gt;
+        &lt;HeaderBar&gt;
+            &lt;MenuBar&gt;
+                &lt;Menu Text="File"&gt;
+                    &lt;MenuItem Text="Open..." Shortcut="Ctrl+O" OnClicked="file.open"/&gt;
+                    &lt;Separator/&gt;
+                    &lt;MenuItem Text="Quit" Shortcut="Ctrl+Q" OnClicked="app.quit"/&gt;
+                &lt;/Menu&gt;
+            &lt;/MenuBar&gt;
+            &lt;Button Text="Run" Style="Primary" Slot.HAlign="Right" OnClicked="run"/&gt;
+        &lt;/HeaderBar&gt;
+        &lt;DockArea Slot.Fill="1"&gt;
+            &lt;TextEditor Name="code" Slot.Title="main.c" Language="C" LineNumbers="true"/&gt;
+            &lt;TreeView Name="files" Slot.Title="Files" Slot.Dock="Left" Slot.DockSize="0.22"/&gt;
+            &lt;TextEditor Name="log" Slot.Title="Output" Slot.Dock="Bottom" Slot.DockSize="0.3" ReadOnly="true"/&gt;
+        &lt;/DockArea&gt;
+    &lt;/VBox&gt;
+&lt;/Window&gt;</pre>
+
+<p>A <code>MenuItem</code> with a <code>Shortcut</code> works without a <code>&lt;Shortcut&gt;</code>
+element: the window looks in its menus when keys are pressed. In a window
+with <code>CustomHeader</code>, the <code>HeaderBar</code> draws the title and the window buttons;
+dragging it moves the window, and any widget with <code>WindowDrag="true"</code> does
+the same.</p>
+
+<h3 id="tag-Window">&lt;Window&gt;</h3>
+<p>A window; it contains one element, and optionally an Island and Shortcut elements.</p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Title</code></td><td>text</td><td>Title of the window.</td></tr>
+<tr><td><code>Width</code></td><td>number</td><td>Width of the content, in logical units.</td></tr>
+<tr><td><code>Height</code></td><td>number</td><td>Height of the content.</td></tr>
+<tr><td><code>MinWidth</code></td><td>number</td><td>The user cannot make the window narrower.</td></tr>
+<tr><td><code>MinHeight</code></td><td>number</td><td>The user cannot make the window shorter.</td></tr>
+<tr><td><code>Resizable</code></td><td>boolean</td><td>false fixes the size.</td></tr>
+<tr><td><code>CustomHeader</code></td><td>boolean</td><td>No title bar from the system: a HeaderBar of the interface replaces it.</td></tr>
+<tr><td><code>Borderless</code></td><td>boolean</td><td>No frame at all.</td></tr>
+<tr><td><code>Maximized</code></td><td>boolean</td><td>Starts maximized.</td></tr>
+<tr><td><code>Hidden</code></td><td>boolean</td><td>Starts hidden, until <a href="reference.html#Rwindow_show">Rwindow_show</a>.</td></tr>
+<tr><td><code>ClearColor</code></td><td>color</td><td>Color behind the content.</td></tr>
+<tr><td><code>Background</code></td><td>file path</td><td>Image behind the content (what glass refracts).</td></tr>
+<tr><td><code>Transparent</code></td><td>boolean</td><td>The window can be seen through where nothing is drawn (needs a compositing window system).</td></tr>
+<tr><td><code>Backdrop</code></td><td><code>None</code> | <code>Transparent</code> | <code>Blur</code> | <code>Acrylic</code> | <code>Mica</code></td><td>What the system shows behind a window that is seen through: the desktop as it is, blurred, or a material of Windows 11.</td></tr>
+<tr><td><code>Theme</code></td><td><code>Dark</code> | <code>Light</code> | <code>GlassDark</code> | <code>GlassLight</code> | <code>HighContrastDark</code> | <code>HighContrastLight</code></td><td>Theme of the window: a name, or a theme file.</td></tr>
+</table></div>
+<h3 id="tag-HeaderBar">&lt;HeaderBar&gt;</h3>
+<p>The title bar of a window with a custom header; holds any widgets. <small>(also written <code>TitleBar</code>; any number of child widgets)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Title</code></td><td>text</td><td>Text of the bar.</td></tr>
+<tr><td><code>Buttons</code></td><td><code>All</code> | <code>None</code> | <code>Close</code> | <code>Close,Minimize</code> | <code>Close,Maximize</code></td><td>The window buttons the bar shows.</td></tr>
+<tr><td><code>ButtonSide</code></td><td><code>Right</code> | <code>Left</code></td><td>Where the window buttons are.</td></tr>
+<tr><td><code>TitleAlign</code></td><td><code>Center</code> | <code>Left</code></td><td>Where the title is.</td></tr>
+<tr><td><code>Background</code></td><td>boolean</td><td>false leaves the bar without a surface, over what is behind.</td></tr>
+</table></div>
+<h3 id="tag-DockArea">&lt;DockArea&gt;</h3>
+<p>Panels the user arranges by dragging their tabs. <small>(any number of child widgets)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Movable</code></td><td>boolean</td><td>false keeps the panels where they are.</td></tr>
+<tr><td><code>Layout</code></td><td>text</td><td>An arrangement saved with <a href="reference.html#Rdock_area_save_layout">Rdock_area_save_layout</a>.</td></tr>
+<tr><td><code>CloseHides</code></td><td>boolean</td><td>The close button of a tab hides its panel (<a href="reference.html#Rdock_area_open_panel">Rdock_area_open_panel</a> brings it back) instead of deleting it.</td></tr>
+<tr><td><code>Tearable</code></td><td>boolean</td><td>false: a tab dragged out of the area does not take its panel to a window of its own.</td></tr>
+</table></div>
+<h3 id="tag-Island">&lt;Island&gt;</h3>
+<p>A pill at the top of the window that unfolds: first child folded, second unfolded. <small>(also written <code>Notch</code>, <code>DynamicIsland</code>; any number of child widgets)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Expanded</code></td><td>boolean</td><td>Unfolded.</td></tr>
+<tr><td><code>ExpandOnHover</code></td><td>boolean</td><td>Unfolds while the pointer is over it.</td></tr>
+<tr><td><code>ExpandOnClick</code></td><td>boolean</td><td>A click unfolds it and folds it back.</td></tr>
+<tr><td><code>Attached</code></td><td>boolean</td><td>Hangs from the top edge, like a notch, instead of floating below it.</td></tr>
+</table></div>
+<h3 id="tag-MenuBar">&lt;MenuBar&gt;</h3>
+<p>A bar of Menu elements. <small>(any number of child widgets)</small></p>
+<p><small>No attribute of its own: those of every widget and of its slot.</small></p>
+<h3 id="tag-Menu">&lt;Menu&gt;</h3>
+<p>A menu: MenuItem, Separator and Menu elements. <small>(any number of child widgets)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Title</code></td><td>text</td><td>Text of the menu in its bar, or in the menu that holds it.</td></tr>
+</table></div>
+<h3 id="tag-MenuItem">&lt;MenuItem&gt;</h3>
+<p>An item of a menu. <small>(no child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Text</code></td><td>text</td><td>Text of the item.</td></tr>
+<tr><td><code>Shortcut</code></td><td>text</td><td>Keys shown beside it and that fire it: "Ctrl+S".</td></tr>
+<tr><td><code>Checkable</code></td><td>boolean</td><td>Clicking it checks and unchecks it.</td></tr>
+<tr><td><code>Checked</code></td><td>boolean</td><td>Its state.</td></tr>
+<tr><td><code>Separator</code></td><td>boolean</td><td>A line instead of an item.</td></tr>
+<tr><td><code>OnClicked</code></td><td>action name</td><td>Action fired by the item.</td></tr>
+</table></div>
+
+<h2 id="panels">7. Panels</h2>
+
+<p>Panels place their children; how each child is placed is written on the
+child, in its slot (<a href="#slot-attributes">slot attributes</a>).</p>
+
+<pre>&lt;Grid Columns="auto,1" Rows="auto,auto,1" Spacing="8"&gt;
+    &lt;Label Text="Name"/&gt;          &lt;TextInput Slot.Column="1"/&gt;
+    &lt;Label Text="Notes" Slot.Row="1"/&gt;
+    &lt;TextEditor Slot.Row="1" Slot.Column="1" Slot.RowSpan="2" Height="120"/&gt;
+&lt;/Grid&gt;
+
+&lt;Canvas&gt;
+    &lt;!-- pinned to the bottom right corner, 16 units from it --&gt;
+    &lt;Button Text="Help" Slot.Anchors="1,1" Slot.Alignment="1,1" Slot.Position="-16,-16"/&gt;
+    &lt;!-- stretched over the whole width, 40 high --&gt;
+    &lt;Border Background="#202020" Slot.Anchors="0,0,1,0" Slot.Size="0,40"/&gt;
+&lt;/Canvas&gt;
+
+&lt;Splitter MinPaneSize="120"&gt;
+    &lt;TreeView Slot.Fill="1"/&gt;
+    &lt;TextEditor Slot.Fill="3"/&gt;
+&lt;/Splitter&gt;
+
+&lt;Border Padding="16" CornerRadius="14" Shadow="24,0,8" Material="FrostedGlass"&gt;
+    &lt;Label Text="On glass"/&gt;
+&lt;/Border&gt;
+
+&lt;Border Effect="aurora" CornerRadius="18" Height="160"&gt;
+    &lt;Label Text="Tonight" TextSize="24" Slot.Padding="16" Slot.VAlign="Bottom"/&gt;
+&lt;/Border&gt;</pre>
+
+<h3 id="tag-VBox">&lt;VBox&gt;</h3>
+<p>Stacks its children from top to bottom. <small>(also written <code>VerticalBox</code>; any number of child widgets)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Spacing</code></td><td>number</td><td>Space between the children.</td></tr>
+</table></div>
+<h3 id="tag-HBox">&lt;HBox&gt;</h3>
+<p>Lines its children up from left to right. <small>(also written <code>HorizontalBox</code>; any number of child widgets)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Spacing</code></td><td>number</td><td>Space between the children.</td></tr>
+</table></div>
+<h3 id="tag-Grid">&lt;Grid&gt;</h3>
+<p>Places its children in rows and columns (Slot.Column, Slot.Row). <small>(also written <code>GridPanel</code>; any number of child widgets)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Columns</code></td><td>text</td><td>Share of the width of each column: "0,1,2" (0 = the size of its content).</td></tr>
+<tr><td><code>Rows</code></td><td>text</td><td>Share of the height of each row.</td></tr>
+<tr><td><code>Spacing</code></td><td>number</td><td>Space between the cells.</td></tr>
+</table></div>
+<h3 id="tag-UniformGrid">&lt;UniformGrid&gt;</h3>
+<p>Cells of the same size, filled in order. <small>(also written <code>UniformGridPanel</code>; any number of child widgets)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Columns</code></td><td>number</td><td>Number of columns; 0 fits as many as the width allows.</td></tr>
+<tr><td><code>MinCellSize</code></td><td>numbers, comma separated</td><td>"width,height" every cell has at least.</td></tr>
+<tr><td><code>Spacing</code></td><td>number</td><td>Space between the cells.</td></tr>
+</table></div>
+<h3 id="tag-Overlay">&lt;Overlay&gt;</h3>
+<p>Puts its children on top of each other. <small>(any number of child widgets)</small></p>
+<p><small>No attribute of its own: those of every widget and of its slot.</small></p>
+<h3 id="tag-Border">&lt;Border&gt;</h3>
+<p>A surface with padding around one child. <small>(one child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Padding</code></td><td>numbers, comma separated</td><td>Space between the border and its content.</td></tr>
+<tr><td><code>Background</code></td><td>color</td><td>Color of the surface.</td></tr>
+<tr><td><code>BorderColor</code></td><td>color</td><td>Color of the outline.</td></tr>
+<tr><td><code>BorderWidth</code></td><td>number</td><td>Width of the outline.</td></tr>
+<tr><td><code>CornerRadius</code></td><td>numbers, comma separated</td><td>One number, or "top-left,top-right,bottom-right,bottom-left".</td></tr>
+<tr><td><code>Shadow</code></td><td>numbers, comma separated</td><td>"blur" or "blur,x,y".</td></tr>
+<tr><td><code>Effect</code></td><td>text</td><td>An effect as its background: aurora, shimmer, neon, ripple, plasma, grain, spotlight, mesh, or a .spv file (raven_shader.h).</td></tr>
+<tr><td><code>EffectColor</code></td><td>color</td><td>First color of the effect.</td></tr>
+<tr><td><code>EffectColor2</code></td><td>color</td><td>Second color of the effect.</td></tr>
+<tr><td><code>EffectParams</code></td><td>numbers, comma separated</td><td>The four parameters of the effect: "a,b,c,d" (fewer keep the defaults of the others).</td></tr>
+<tr><td><code>EffectAnimate</code></td><td>boolean</td><td>Draws frames while it is shown (the animated effects do by default).</td></tr>
+<tr><td><code>EffectPointer</code></td><td>boolean</td><td>The effect follows the pointer: where it is, over the border and pressing it (true by default).</td></tr>
+<tr><td><code>EffectBackdrop</code></td><td>boolean</td><td>The .spv effect reads what is behind it (R_SHADER_BACKDROP).</td></tr>
+</table></div>
+<h3 id="tag-SizeBox">&lt;SizeBox&gt;</h3>
+<p>Gives one child a size or a shape. <small>(also written <code>Box</code>; one child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>AspectRatio</code></td><td>numbers, comma separated</td><td>Width over height: "1.5" or "16,9".</td></tr>
+</table></div>
+<h3 id="tag-Spacer">&lt;Spacer&gt;</h3>
+<p>Empty space. <small>(no child widget)</small></p>
+<p><small>No attribute of its own: those of every widget and of its slot.</small></p>
+<h3 id="tag-ScrollBox">&lt;ScrollBox&gt;</h3>
+<p>Scrolls content that is larger than its place. <small>(any number of child widgets)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Orientation</code></td><td><code>Horizontal</code> | <code>Vertical</code></td><td>The way the content scrolls and is stacked.</td></tr>
+<tr><td><code>ScrollBoth</code></td><td>boolean</td><td>Scrolls both ways.</td></tr>
+<tr><td><code>Spacing</code></td><td>number</td><td>Space between the children.</td></tr>
+</table></div>
+<h3 id="tag-Splitter">&lt;Splitter&gt;</h3>
+<p>Panes separated by bars the user drags. <small>(any number of child widgets)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Orientation</code></td><td><code>Horizontal</code> | <code>Vertical</code></td><td>Horizontal puts the panes side by side.</td></tr>
+<tr><td><code>MinPaneSize</code></td><td>number</td><td>The smallest a pane can be dragged to.</td></tr>
+</table></div>
+<h3 id="tag-WrapBox">&lt;WrapBox&gt;</h3>
+<p>Lines its children up and continues on the next line. <small>(any number of child widgets)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Spacing</code></td><td>number</td><td>Space between the children.</td></tr>
+</table></div>
+<h3 id="tag-Canvas">&lt;Canvas&gt;</h3>
+<p>Places its children freely (Slot.Position, Slot.Size, Slot.Anchors). <small>(also written <code>CanvasPanel</code>; any number of child widgets)</small></p>
+<p><small>No attribute of its own: those of every widget and of its slot.</small></p>
+<h3 id="tag-Switcher">&lt;Switcher&gt;</h3>
+<p>Shows one of its children. <small>(also written <code>WidgetSwitcher</code>; any number of child widgets)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Index</code></td><td>number</td><td>Which child is shown, from 0.</td></tr>
+</table></div>
+<h3 id="tag-TabView">&lt;TabView&gt;</h3>
+<p>Its children as tabs (Slot.Title). <small>(also written <code>Tabs</code>; any number of child widgets)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>ActiveTab</code></td><td>number</td><td>Which tab is shown, from 0.</td></tr>
+<tr><td><code>OnChanged</code></td><td>action name</td><td>Action fired when the tab changes.</td></tr>
+</table></div>
+<h3 id="tag-Expander">&lt;Expander&gt;</h3>
+<p>A header that shows and hides one child. <small>(also written <code>ExpandableArea</code>; one child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Title</code></td><td>text</td><td>Text of the header.</td></tr>
+<tr><td><code>Expanded</code></td><td>boolean</td><td>The content is shown.</td></tr>
+<tr><td><code>OnChanged</code></td><td>action name</td><td>Action fired when it opens or closes.</td></tr>
+</table></div>
+<h3 id="tag-BackgroundBlur">&lt;BackgroundBlur&gt;</h3>
+<p>A panel that shows what is behind it out of focus, around one child. <small>(one child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Style</code></td><td><code>Plain</code> | <code>Frosted</code> | <code>Glass</code> | <code>Native</code></td><td>Plain only blurs; Frosted adds a veil and grain; Glass bends light at its rim; Native shows the desktop, blurred by the system, through a window that is seen through.</td></tr>
+<tr><td><code>Radius</code></td><td>number</td><td>How far the blur spreads; 0 uses the theme.</td></tr>
+<tr><td><code>Tint</code></td><td>color</td><td>Color laid over what is blurred; its alpha is its strength.</td></tr>
+<tr><td><code>Saturation</code></td><td>number</td><td>Colors of what is behind: 1 unchanged, 0 gray, more than 1 vivid.</td></tr>
+<tr><td><code>Grain</code></td><td>number</td><td>Fine noise, from 0 to 1 (what keeps a blur from banding).</td></tr>
+<tr><td><code>Shadow</code></td><td>number</td><td>Blur of the shadow under the panel; 0 = none.</td></tr>
+<tr><td><code>Padding</code></td><td>numbers, comma separated</td><td>Space around the child.</td></tr>
+<tr><td><code>CornerRadius</code></td><td>number</td><td>Radius of the corners.</td></tr>
+</table></div>
+
+<h2 id="controls">8. Controls</h2>
+
+<pre>&lt;VBox Spacing="8"&gt;
+    &lt;Label Markdown="true" Wrap="true"&gt;**Bold**, *italic* and a [link](https://example.org).&lt;/Label&gt;
+    &lt;Button Text="Delete" Class="danger" Tooltip="Deletes the file" OnClicked="file.delete"/&gt;
+    &lt;Checkbox Text="Dark mode" Style="Switch" Checked="true" OnChanged="view.dark"/&gt;
+    &lt;HBox Spacing="6"&gt;
+        &lt;Checkbox Text="Small" Style="Radio"/&gt;
+        &lt;Checkbox Text="Large" Style="Radio" Checked="true"/&gt;
+    &lt;/HBox&gt;
+    &lt;Slider Min="0" Max="100" Value="40" Step="5" OnChanged="volume"/&gt;
+    &lt;SpinBox Min="0" Max="10" Value="2.5" Step="0.1" Decimals="1"/&gt;
+    &lt;TextInput Name="email" Placeholder="you@example.com" OnCommitted="send"/&gt;
+    &lt;ComboBox Items="Small|Medium|Large" Selected="1"/&gt;
+    &lt;ListView Height="120"&gt;
+        &lt;Item Text="First"/&gt;
+        &lt;Item Text="Second"/&gt;
+    &lt;/ListView&gt;
+    &lt;TreeView Height="140"&gt;
+        &lt;Item Text="src" Expanded="true"&gt;
+            &lt;Item Text="main.c"/&gt;
+        &lt;/Item&gt;
+    &lt;/TreeView&gt;
+    &lt;Image Source="logo.png" Width="64" Height="64" Stretch="Fit"/&gt;
+    &lt;ProgressBar Value="0.6"/&gt;
+    &lt;TextEditor Language="Python" LineNumbers="true" Height="200"&gt;print("hello")&lt;/TextEditor&gt;
+&lt;/VBox&gt;</pre>
+
+<h3 id="tag-Label">&lt;Label&gt;</h3>
+<p>Text. <small>(also written <code>Text</code>, <code>TextBlock</code>; no child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Text</code></td><td>text</td><td>The text.</td></tr>
+<tr><td><code>TextSize</code></td><td>number</td><td>Size of the text; 0 uses the theme.</td></tr>
+<tr><td><code>TextAlign</code></td><td><code>Left</code> | <code>Center</code> | <code>Right</code></td><td>Where the lines sit across the label.</td></tr>
+<tr><td><code>Wrap</code></td><td>boolean</td><td>Long lines continue on the next one.</td></tr>
+<tr><td><code>Color</code></td><td>color</td><td>Color of the text.</td></tr>
+<tr><td><code>Font</code></td><td>file path</td><td>Font file, or "monospace".</td></tr>
+<tr><td><code>Markdown</code></td><td>boolean</td><td>The text is Markdown: headings, emphasis, lists, quotes, code, tables, links.</td></tr>
+</table></div>
+<h3 id="tag-Button">&lt;Button&gt;</h3>
+<p>A button, with a text or with one child. <small>(one child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Text</code></td><td>text</td><td>The text of the button.</td></tr>
+<tr><td><code>Style</code></td><td><code>Default</code> | <code>Primary</code> | <code>Flat</code></td><td>Primary is the button of the main action; Flat has no surface until hovered.</td></tr>
+<tr><td><code>OnClicked</code></td><td>action name</td><td>Action fired by a click.</td></tr>
+</table></div>
+<h3 id="tag-Checkbox">&lt;Checkbox&gt;</h3>
+<p>A box to check, a radio button or a switch. <small>(also written <code>CheckBox</code>; no child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Text</code></td><td>text</td><td>The text beside the box.</td></tr>
+<tr><td><code>Checked</code></td><td>boolean</td><td>Its state.</td></tr>
+<tr><td><code>Style</code></td><td><code>Check</code> | <code>Radio</code> | <code>Switch</code></td><td>What it looks like.</td></tr>
+<tr><td><code>OnChanged</code></td><td>action name</td><td>Action fired when the state changes.</td></tr>
+</table></div>
+<h3 id="tag-Slider">&lt;Slider&gt;</h3>
+<p>A value chosen by dragging. <small>(no child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Min</code></td><td>number</td><td>Lowest value.</td></tr>
+<tr><td><code>Max</code></td><td>number</td><td>Highest value.</td></tr>
+<tr><td><code>Value</code></td><td>number</td><td>The value.</td></tr>
+<tr><td><code>Step</code></td><td>number</td><td>The value moves by this much; 0 moves freely.</td></tr>
+<tr><td><code>Orientation</code></td><td><code>Horizontal</code> | <code>Vertical</code></td><td>The way the slider lies.</td></tr>
+<tr><td><code>OnChanged</code></td><td>action name</td><td>Action fired when the value changes.</td></tr>
+</table></div>
+<h3 id="tag-ProgressBar">&lt;ProgressBar&gt;</h3>
+<p>How far something is. <small>(no child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Value</code></td><td>number</td><td>How far, from 0 to 1.</td></tr>
+</table></div>
+<h3 id="tag-Image">&lt;Image&gt;</h3>
+<p>A picture. <small>(no child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Source</code></td><td>file path</td><td>Image file.</td></tr>
+<tr><td><code>Stretch</code></td><td><code>Fill</code> | <code>Fit</code> | <code>Cover</code> | <code>None</code></td><td>How the image fills its place.</td></tr>
+<tr><td><code>Tint</code></td><td>color</td><td>Color the image is multiplied by.</td></tr>
+<tr><td><code>CornerRadius</code></td><td>number</td><td>Rounds the corners.</td></tr>
+<tr><td><code>Region</code></td><td>numbers, comma separated</td><td>Part of the image shown: "minu,minv,maxu,maxv" from 0 to 1.</td></tr>
+<tr><td><code>TintText</code></td><td>boolean</td><td>Tinted with the color of the text around it: white icons that follow the theme.</td></tr>
+</table></div>
+<h3 id="tag-TextInput">&lt;TextInput&gt;</h3>
+<p>One line of text to type. <small>(also written <code>TextBox</code>, <code>EditableText</code>; no child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Text</code></td><td>text</td><td>The text.</td></tr>
+<tr><td><code>Placeholder</code></td><td>text</td><td>Shown, dimmed, while the input is empty.</td></tr>
+<tr><td><code>Password</code></td><td>boolean</td><td>Shows dots.</td></tr>
+<tr><td><code>ReadOnly</code></td><td>boolean</td><td>Can be selected and copied, not changed.</td></tr>
+<tr><td><code>MaxLength</code></td><td>number</td><td>Most characters accepted; 0 for no limit.</td></tr>
+<tr><td><code>OnChanged</code></td><td>action name</td><td>Action fired at each change.</td></tr>
+<tr><td><code>OnCommitted</code></td><td>action name</td><td>Action fired by Enter.</td></tr>
+</table></div>
+<h3 id="tag-SpinBox">&lt;SpinBox&gt;</h3>
+<p>A number to type or to step. <small>(no child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Min</code></td><td>number</td><td>Lowest value.</td></tr>
+<tr><td><code>Max</code></td><td>number</td><td>Highest value.</td></tr>
+<tr><td><code>Value</code></td><td>number</td><td>The value.</td></tr>
+<tr><td><code>Step</code></td><td>number</td><td>What the arrows add.</td></tr>
+<tr><td><code>Decimals</code></td><td>number</td><td>Digits shown after the point.</td></tr>
+<tr><td><code>OnChanged</code></td><td>action name</td><td>Action fired when the value changes.</td></tr>
+</table></div>
+<h3 id="tag-ComboBox">&lt;ComboBox&gt;</h3>
+<p>One choice in a list that drops down. <small>(no child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Items</code></td><td>texts separated by <code>|</code></td><td>The choices, separated by '|'.</td></tr>
+<tr><td><code>Selected</code></td><td>number</td><td>Which one is chosen, from 0; -1 for none.</td></tr>
+<tr><td><code>OnChanged</code></td><td>action name</td><td>Action fired when the choice changes.</td></tr>
+</table></div>
+<h3 id="tag-Separator">&lt;Separator&gt;</h3>
+<p>A line between things. <small>(no child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Orientation</code></td><td><code>Horizontal</code> | <code>Vertical</code></td><td>Horizontal is a line across.</td></tr>
+</table></div>
+<h3 id="tag-ListView">&lt;ListView&gt;</h3>
+<p>Rows of text, one selected; any number of them. <small>(no child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Items</code></td><td>texts separated by <code>|</code></td><td>The rows, separated by '|'.</td></tr>
+<tr><td><code>Selected</code></td><td>number</td><td>Which row is selected, from 0; -1 for none.</td></tr>
+<tr><td><code>OnChanged</code></td><td>action name</td><td>Action fired when the selection changes.</td></tr>
+<tr><td><code>OnActivated</code></td><td>action name</td><td>Action fired by a double click or Enter.</td></tr>
+</table></div>
+<h3 id="tag-TreeView">&lt;TreeView&gt;</h3>
+<p>Rows inside rows, made of Item elements. <small>(no child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>OnChanged</code></td><td>action name</td><td>Action fired when the selection changes.</td></tr>
+<tr><td><code>OnActivated</code></td><td>action name</td><td>Action fired by a double click or Enter.</td></tr>
+</table></div>
+<h3 id="tag-TileView">&lt;TileView&gt;</h3>
+<p>A grid of tiles, an icon over a name, given by the application (<a href="reference.html#Rtile_view_set_items">Rtile_view_set_items</a>). <small>(no child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>TileWidth</code></td><td>number</td><td>Width of a tile.</td></tr>
+<tr><td><code>Layout</code></td><td><code>Tiles</code> | <code>Rows</code></td><td>Tiles: a grid. Rows: one item per line, as wide as the view, the icon on the left.</td></tr>
+<tr><td><code>TileHeight</code></td><td>number</td><td>Height of a tile, name included.</td></tr>
+<tr><td><code>IconSize</code></td><td>number</td><td>Size of the icon of a tile.</td></tr>
+<tr><td><code>Spacing</code></td><td>number</td><td>Space between the tiles.</td></tr>
+<tr><td><code>EmptyText</code></td><td>text</td><td>Text shown when there is no tile.</td></tr>
+<tr><td><code>DragType</code></td><td>text</td><td>Type given to <a href="reference.html#Rdrag_begin">Rdrag_begin</a> when tiles are dragged; empty: no drag.</td></tr>
+<tr><td><code>OnActivated</code></td><td>action name</td><td>Action fired by a double click or Enter.</td></tr>
+</table></div>
+<h3 id="tag-TextEditor">&lt;TextEditor&gt;</h3>
+<p>Text of several lines: notes, code. <small>(also written <code>TextArea</code>; no child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Text</code></td><td>text</td><td>The text.</td></tr>
+<tr><td><code>Language</code></td><td><code>None</code> | <code>C</code> | <code>C++</code> | <code>C#</code> | <code>Java</code> | <code>JavaScript</code> | <code>TypeScript</code> | <code>Python</code> | <code>Rust</code> | <code>GLSL</code> | <code>JSON</code> | <code>CSS</code> | <code>XML</code> | <code>HTML</code></td><td>Colors the text and helps while typing.</td></tr>
+<tr><td><code>LineNumbers</code></td><td>boolean</td><td>Shows the line numbers in a margin.</td></tr>
+<tr><td><code>Wrap</code></td><td>boolean</td><td>Long lines continue on the next row.</td></tr>
+<tr><td><code>ReadOnly</code></td><td>boolean</td><td>Can be scrolled, selected and copied, not changed.</td></tr>
+<tr><td><code>Placeholder</code></td><td>text</td><td>Shown, dimmed, while the editor is empty.</td></tr>
+<tr><td><code>TabSize</code></td><td>number</td><td>Width of a tab, in spaces.</td></tr>
+<tr><td><code>TabSpaces</code></td><td>boolean</td><td>The Tab key writes spaces.</td></tr>
+<tr><td><code>Completion</code></td><td>boolean</td><td>Proposes words while typing.</td></tr>
+<tr><td><code>AutoPairs</code></td><td>boolean</td><td>Closes brackets and quotes, indents after them.</td></tr>
+<tr><td><code>TextSize</code></td><td>number</td><td>Size of the text; 0 uses the theme.</td></tr>
+<tr><td><code>Zoom</code></td><td>number</td><td>Zoom of the text, 1 = 100 % (0.5 .. 4): Ctrl + wheel changes it.</td></tr>
+<tr><td><code>Zoomable</code></td><td>boolean</td><td>Ctrl + wheel, Ctrl + '+' / '-' / 0 zoom the text (on by default).</td></tr>
+<tr><td><code>Font</code></td><td>file path</td><td>Font file, or "monospace".</td></tr>
+<tr><td><code>Markdown</code></td><td>boolean</td><td>The text is Markdown, styled where it is typed (the same as Language="Markdown").</td></tr>
+<tr><td><code>OnChanged</code></td><td>action name</td><td>Action fired at each change.</td></tr>
+</table></div>
+
+<h2 id="tools">9. Tools</h2>
+
+<pre>&lt;NodeGraph Name="graph" FrameAll="true"&gt;
+    &lt;Type Name="number" Color="#64D2FF"/&gt;
+    &lt;Node Name="noise" Title="Noise" X="40" Y="60" Color="#FF9F0A"&gt;
+        &lt;Output Name="value" Label="Value" Type="number"/&gt;
+        &lt;Slider Value="0.4" Width="150"/&gt;
+    &lt;/Node&gt;
+    &lt;Node Name="blend" Title="Blend" X="320" Y="90"&gt;
+        &lt;Input Name="a" Label="A" Type="number"/&gt;
+    &lt;/Node&gt;
+    &lt;Link From="noise.value" To="blend.a"/&gt;
+&lt;/NodeGraph&gt;
+
+&lt;Timeline Duration="12" FrameRate="24" Height="180"&gt;
+    &lt;Track Name="Camera" Color="#0A84FF"&gt;
+        &lt;Clip Start="0" Length="3.5" Label="Wide shot"/&gt;
+        &lt;Key Time="6"/&gt;
+    &lt;/Track&gt;
+    &lt;Marker Time="4" Label="Intro"/&gt;
+&lt;/Timeline&gt;
+
+&lt;ColorPicker Color="#3B82F6" Popup="true" Swatches="#FF453A, #0A84FF, white" OnChanged="color"/&gt;
+
+&lt;BlockEditor Height="320"&gt;
+    &lt;Category Name="Events" Color="#FFBF00"/&gt;
+    &lt;Category Name="Control" Color="#FFAB19"/&gt;
+    &lt;Kind Name="start" Label="when started" Shape="Hat" Category="Events"/&gt;
+    &lt;Kind Name="repeat" Label="repeat %n{10}" Shape="C" Category="Control"/&gt;
+&lt;/BlockEditor&gt;
+
+&lt;FileBrowser Mode="Open" Filter="*.png;*.jpg" Height="360"/&gt;</pre>
+
+<h3 id="tag-ColorPicker">&lt;ColorPicker&gt;</h3>
+<p>Chooses a color: square, hues, opacity, code, numbers, swatches. <small>(no child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Color</code></td><td>color</td><td>The color.</td></tr>
+<tr><td><code>Previous</code></td><td>color</td><td>The color shown next to it, to compare.</td></tr>
+<tr><td><code>Alpha</code></td><td>boolean</td><td>Shows the opacity strip; false makes colors opaque.</td></tr>
+<tr><td><code>Popup</code></td><td>boolean</td><td>A swatch the size of a button, that opens the picker when clicked.</td></tr>
+<tr><td><code>Compact</code></td><td>boolean</td><td>Only the square, the hues and the opacity.</td></tr>
+<tr><td><code>Numbers</code></td><td><code>RGB</code> | <code>HSV</code></td><td>The numbers shown under the square.</td></tr>
+<tr><td><code>Swatches</code></td><td>text</td><td>Colors proposed under the picker: "#FF453A, #0A84FF, white".</td></tr>
+<tr><td><code>OnChanged</code></td><td>action name</td><td>Action fired when the user changes the color.</td></tr>
+</table></div>
+<h3 id="tag-Timeline">&lt;Timeline&gt;</h3>
+<p>A sequencer: Track elements holding Clip and Key elements, and Marker elements. <small>(no child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Duration</code></td><td>number</td><td>Length of the sequence, in seconds.</td></tr>
+<tr><td><code>Time</code></td><td>number</td><td>Where the playhead is, in seconds.</td></tr>
+<tr><td><code>FrameRate</code></td><td>number</td><td>Frames per second: times snap to frames and show as seconds:frames; 0 = none.</td></tr>
+<tr><td><code>Snapping</code></td><td>boolean</td><td>Items snap to frames, to the playhead and to each other.</td></tr>
+<tr><td><code>ViewStart</code></td><td>number</td><td>First second shown.</td></tr>
+<tr><td><code>ViewEnd</code></td><td>number</td><td>Last second shown.</td></tr>
+<tr><td><code>Loop</code></td><td>boolean</td><td>Playing starts again at the end.</td></tr>
+<tr><td><code>Playing</code></td><td>boolean</td><td>The playhead runs.</td></tr>
+<tr><td><code>HeaderWidth</code></td><td>number</td><td>Width of the names of the tracks; 0 fits the longest.</td></tr>
+<tr><td><code>TrackHeight</code></td><td>number</td><td>Height of a track.</td></tr>
+<tr><td><code>OnChanged</code></td><td>action name</td><td>Action fired when the user moves, stretches or removes something.</td></tr>
+</table></div>
+<h3 id="tag-NodeGraph">&lt;NodeGraph&gt;</h3>
+<p>Nodes linked by wires: Node elements (Input, Output, any widget), Link and Type elements. <small>(no child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Zoom</code></td><td>number</td><td>Size of the canvas: 1 = life size.</td></tr>
+<tr><td><code>CenterX</code></td><td>number</td><td>What the middle of the widget shows, across the canvas.</td></tr>
+<tr><td><code>CenterY</code></td><td>number</td><td>What the middle of the widget shows, down the canvas.</td></tr>
+<tr><td><code>Grid</code></td><td>boolean</td><td>The dots of the canvas.</td></tr>
+<tr><td><code>Flow</code></td><td><code>Auto</code> | <code>true</code> | <code>false</code></td><td>The pulses that run along the links: while the pointer is over the graph, always, or never.</td></tr>
+<tr><td><code>ReadOnly</code></td><td>boolean</td><td>The user can look, select and move the view, but not change the graph.</td></tr>
+<tr><td><code>FrameAll</code></td><td>boolean</td><td>Starts with every node in view.</td></tr>
+<tr><td><code>OnChanged</code></td><td>action name</td><td>Action fired when the user links, unlinks, moves or removes something.</td></tr>
+</table></div>
+<h3 id="tag-BlockEditor">&lt;BlockEditor&gt;</h3>
+<p>Blocks that snap into each other (Scratch): Kind elements (Name, Label, Shape, Category) and Category elements (Name, Color). <small>(no child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Zoom</code></td><td>number</td><td>Size of the canvas: 1 = life size.</td></tr>
+<tr><td><code>Palette</code></td><td>boolean</td><td>The column of blocks to drag from, on the left.</td></tr>
+<tr><td><code>OnChanged</code></td><td>action name</td><td>Action fired when the user snaps, moves, edits or deletes blocks.</td></tr>
+</table></div>
+<h3 id="tag-FileBrowser">&lt;FileBrowser&gt;</h3>
+<p>Folders and files to choose from. <small>(no child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Directory</code></td><td>text</td><td>Folder shown first.</td></tr>
+<tr><td><code>Mode</code></td><td><code>Open</code> | <code>Save</code> | <code>Folder</code></td><td>What is being chosen.</td></tr>
+<tr><td><code>Filter</code></td><td>text</td><td>Patterns of the files shown: "*.png;*.jpg".</td></tr>
+<tr><td><code>FileName</code></td><td>text</td><td>Save: the name proposed.</td></tr>
+<tr><td><code>DefaultExtension</code></td><td>text</td><td>Save: added to a name typed without one.</td></tr>
+<tr><td><code>ShowHidden</code></td><td>boolean</td><td>Shows the hidden files.</td></tr>
+<tr><td><code>Multiple</code></td><td>boolean</td><td>Open: several files can be chosen.</td></tr>
+<tr><td><code>Controls</code></td><td>boolean</td><td>false hides the name, the filter and the buttons.</td></tr>
+<tr><td><code>Places</code></td><td>boolean</td><td>false hides the list of places.</td></tr>
+</table></div>
+<h3 id="tag-Viewport">&lt;Viewport&gt;</h3>
+<p>A place the application draws in with its own renderer. <small>(no child widget)</small></p>
+<div class="tw"><table class="v"><tr><th>Attribute</th><th>Value</th><th>Meaning</th></tr>
+<tr><td><code>Stretch</code></td><td><code>Fill</code> | <code>Fit</code> | <code>Cover</code> | <code>None</code></td><td>How the picture fills its place.</td></tr>
+<tr><td><code>FlipY</code></td><td>boolean</td><td>Turns the picture upside down (some renderers draw that way).</td></tr>
+<tr><td><code>Realtime</code></td><td>boolean</td><td>Drawn again at every frame.</td></tr>
+<tr><td><code>Source</code></td><td>file path</td><td>Image shown until the application draws.</td></tr>
+</table></div>
+<h3 id="tag-Custom">&lt;Custom&gt;</h3>
+<p>A widget painted and measured by the application. <small>(any number of child widgets)</small></p>
+<p><small>No attribute of its own: those of every widget and of its slot.</small></p>
+
+<h2 id="elements">10. Elements that are not widgets</h2>
+<div class="tw"><table>
+<tr><th>Element</th><th>Inside</th><th>Attributes</th></tr>
+<tr><td><code>&lt;Shortcut&gt;</code></td><td>Window, or any element</td><td><code>Keys</code> (a shortcut), <code>Action</code>: fires the action when the keys are pressed anywhere in the window</td></tr>
+<tr><td><code>&lt;Item&gt;</code></td><td>ComboBox, ListView, TreeView (nested for a tree)</td><td><code>Text</code> (or the text of the element), <code>Expanded</code> (tree)</td></tr>
+<tr><td><code>&lt;Strings&gt;</code></td><td>anywhere</td><td><code>Source</code>: a CSV table of translations, loaded with the document</td></tr>
+<tr><td><code>&lt;Track&gt;</code></td><td>Timeline</td><td><code>Name</code>, <code>Color</code>, <code>Height</code>, <code>Locked</code>, <code>Muted</code>; contains <code>&lt;Clip&gt;</code> and <code>&lt;Key&gt;</code></td></tr>
+<tr><td><code>&lt;Clip&gt;</code></td><td>Track</td><td><code>Start</code>, <code>Length</code> or <code>End</code>, <code>Label</code> (or the text), <code>Color</code>, <code>Selected</code></td></tr>
+<tr><td><code>&lt;Key&gt;</code></td><td>Track</td><td><code>Time</code>, <code>Label</code>, <code>Color</code></td></tr>
+<tr><td><code>&lt;Marker&gt;</code></td><td>Timeline</td><td><code>Time</code>, <code>Label</code>, <code>Color</code>: a flag on the ruler</td></tr>
+<tr><td><code>&lt;Node&gt;</code></td><td>NodeGraph</td><td><code>Name</code> (for links and <code><a href="reference.html#Rnode_graph_find_node">Rnode_graph_find_node</a></code>), <code>Title</code>, <code>X</code>, <code>Y</code>, <code>Color</code>, <code>Selected</code>; contains <code>&lt;Input&gt;</code>, <code>&lt;Output&gt;</code> and any widgets, shown inside the node</td></tr>
+<tr><td><code>&lt;Input&gt;</code>, <code>&lt;Output&gt;</code></td><td>Node</td><td><code>Name</code>, <code>Label</code>, <code>Type</code>: free text; pins of different types do not link, a pin without a type links to any</td></tr>
+<tr><td><code>&lt;Link&gt;</code></td><td>NodeGraph, after the nodes</td><td><code>From="node.output"</code>, <code>To="node.input"</code></td></tr>
+<tr><td><code>&lt;Type&gt;</code></td><td>NodeGraph</td><td><code>Name</code>, <code>Color</code>: the color of the pins of a type and of their links</td></tr>
+<tr><td><code>&lt;Kind&gt;</code></td><td>BlockEditor</td><td><code>Name</code>, <code>Label</code> (words and slots: <code>%n</code> number, <code>%s</code> text, <code>%b</code> condition, <code>%r</code> any value, <code>%m</code> menu; <code>{10}</code> after a slot is its default; <code>|</code> separates the sections of a C block), <code>Shape</code> (<code>Statement Hat Cap C Reporter Boolean</code>), <code>Category</code></td></tr>
+<tr><td><code>&lt;Category&gt;</code></td><td>BlockEditor</td><td><code>Name</code>, <code>Color</code></td></tr>
+<tr><td><code>&lt;Theme&gt;</code></td><td>a theme file</td><td>see the <a href="guide.html#themes">guide</a></td></tr>
+<tr><td><code>&lt;Widget&gt;</code>, <code>&lt;Widgets&gt;</code>, <code>&lt;Children&gt;</code>, <code>&lt;If&gt;</code>, <code>&lt;Repeat&gt;</code>, <code>&lt;ForEach&gt;</code>, <code>&lt;Include&gt;</code></td><td>anywhere</td><td>see <a href="#declared">Declaring tags</a></td></tr>
+</table></div>
+
+<h2 id="strings">11. Translations</h2>
+
+<pre>&lt;Window Title="@app.title"&gt;
+    &lt;Strings Source="strings.csv"/&gt;
+    &lt;VBox Spacing="8" Slot.Padding="16"&gt;
+        &lt;Label Text="@greeting"/&gt;
+        &lt;Button Text="@menu.file" Tooltip="@menu.file.tip"/&gt;
+    &lt;/VBox&gt;
+&lt;/Window&gt;</pre>
+
+<pre>key,en,fr
+app.title,Notes,Notes
+greeting,Hello!,Bonjour !
+menu.file,File,Fichier
+menu.file.tip,Open and save files,Ouvrir et enregistrer</pre>
+
+<p>A text that starts with <code>@</code> is a key: the widget shows the text of the
+language in use and follows it when the language changes
+(<code><a href="reference.html#Rlocale_set_language">Rlocale_set_language</a></code>). <code>@@</code> writes a text that starts with <code>@</code>. The guide
+has <a href="guide.html#locale">everything about translations</a>.</p>
+
+<h2 id="markdown">12. Markdown</h2>
+
+<pre>&lt;Label Markdown="true" Wrap="true"&gt;
+    ## Notes
+    Some **strong** and *emphasized* text, ~~struck~~, `code`,
+    a [link](https://example.org) and an [action](action:file.open).
+
+    - a list
+    - [x] with a box
+
+    | Key | Value |
+    |-----|-------|
+    | a   | 1     |
+&lt;/Label&gt;
+&lt;TextEditor Markdown="true"/&gt;</pre>
+
+<p>On a <code>Label</code> the text is rendered: headings, strong, emphasis, struck,
+code, links, lists (nested, numbered, with boxes), quotes, code blocks
+(colored when they name a language of the text editor), tables, rules, line
+breaks and images (<code>![description](path)</code> on a line of its own; the path is
+relative to the document, or an <code>https://</code> address loaded in the
+background). The text may be indented with the document;
+<code>&lt;![CDATA[ ... ]]&gt;</code> avoids escaping <code>&lt;</code> and <code>&amp;</code>. A link opens in
+the browser of the system; <code>action:name</code> fires an action;
+<code><a href="reference.html#Rlabel_set_link_callback">Rlabel_set_link_callback</a></code> receives them all instead. On a <code>TextEditor</code> the
+text stays as typed and is styled where it stands.</p>
+
+<h2 id="declared">13. Declaring tags</h2>
+
+<p>A document can declare its own tags. A <code>&lt;Widget&gt;</code> names a piece of
+interface, with parameters, and is then used like any tag of the library:</p>
+
+<pre>&lt;Widget Name="Field" Label="Name" Hint="" Wide="false"&gt;
+    &lt;HBox Spacing="8"&gt;
+        &lt;Label Text="{Label}:" Width="{Wide ? 140 : 90}"/&gt;
+        &lt;TextInput Placeholder="{Hint}" Slot.Fill="1"/&gt;
+        &lt;Children/&gt;
+    &lt;/HBox&gt;
+&lt;/Widget&gt;
+
+&lt;Field Label="Email" Hint="you@example.com" Name="email"/&gt;
+&lt;Field Label="Password" Wide="true"&gt;&lt;Button Text="Show"/&gt;&lt;/Field&gt;
+
+&lt;Widget Name="Card" Title=""&gt;
+    &lt;Border Class="card" Padding="14"&gt;
+        &lt;VBox Spacing="6"&gt;
+            &lt;Label Text="{Title}" TextSize="17" If="{!empty(Title)}"/&gt;
+            &lt;Children/&gt;
+            &lt;HBox Spacing="6"&gt;&lt;Children Name="footer"/&gt;&lt;/HBox&gt;
+        &lt;/VBox&gt;
+    &lt;/Border&gt;
+&lt;/Widget&gt;
+
+&lt;Card Title="Upload"&gt;
+    &lt;Label Text="Drop files here"/&gt;
+    &lt;Button Text="Send" Into="footer"/&gt;
+&lt;/Card&gt;
+
+&lt;Repeat Count="3" Var="i"&gt;
+    &lt;Checkbox Text="Option {i + 1}"/&gt;
+&lt;/Repeat&gt;
+&lt;ForEach Items="Red|Green|Blue" Var="c" Index="n"&gt;
+    &lt;Button Text="{n}: {c}" OnClicked="color.{lower(c)}"/&gt;
+&lt;/ForEach&gt;
+&lt;Include Source="parts/toolbar.xml"/&gt;</pre>
+
+<ul>
+<li>The attributes of <code>&lt;Widget&gt;</code> other than <code>Name</code> are its parameters, with their default values. It contains exactly one element: what the tag stands for.</li>
+<li>Inside it, <code>{...}</code> is computed and replaced by its value; <code>{{</code> and <code>}}</code> write a brace.</li>
+<li>Where the tag is used, the attributes that are parameters give their values; the others (<code>Name</code>, <code>Slot.Fill</code>, <code>OnClicked</code>, <code>Material</code>...) go to the element the tag stands for. The text inside the tag is its <code>Text</code>.</li>
+<li><code>&lt;Children/&gt;</code> is replaced by the children given where the tag is used; <code>&lt;Children Name="footer"/&gt;</code> by those marked <code>Into="footer"</code>.</li>
+<li>A declaration is known from the moment it is read until the library shuts down, in every document loaded afterwards. Declaring a name again replaces it. It cannot take the name of a tag of the library, and it cannot use itself.</li>
+<li><code>&lt;Widgets&gt;</code> is the root of a file that only holds declarations. From C: <code><a href="reference.html#Rxml_register_widgets">Rxml_register_widgets</a></code>, <code><a href="reference.html#Rxml_register_widgets_from_file">Rxml_register_widgets_from_file</a></code>, <code><a href="reference.html#Rxml_get_registered_widget_name">Rxml_get_registered_widget_name</a></code>.</li>
+</ul>
+
+<div class="tw"><table>
+<tr><th>Element or attribute</th><th></th></tr>
+<tr><td><code>If="..."</code></td><td>on any element: kept when the value is true</td></tr>
+<tr><td><code>&lt;If Test="..."&gt;</code></td><td>keeps what it contains when the test is true</td></tr>
+<tr><td><code>&lt;Repeat Count="3" Var="i"&gt;</code></td><td>repeats what it contains; <code>{i}</code> is 0, 1, 2</td></tr>
+<tr><td><code>&lt;ForEach Items="a|b" Var="x" Index="n" Separator="|"&gt;</code></td><td>repeats for each text of a list</td></tr>
+<tr><td><code>&lt;Include Source="file.xml"/&gt;</code></td><td>brings in another file: its declarations, and its element if it has one</td></tr>
+</table></div>
+
+<p><b>Expressions.</b> Numbers, texts between single quotes, parameters and
+variables; <code>+ - * / %</code> (<code>+</code> joins texts), <code>== != &lt; &lt;= &gt; &gt;=</code>,
+<code>&amp;&amp; || !</code>, <code>a ? b : c</code>, parentheses; <code>min(a, b)</code>, <code>max(a, b)</code>, <code>round</code>,
+<code>floor</code>, <code>ceil</code>, <code>abs</code>, <code>len(text)</code>, <code>upper</code>, <code>lower</code>, <code>empty(text)</code>,
+<code>default(value, fallback)</code>; <code>{Instance}</code> is a number that differs for each use
+of a tag (for unique names). False is <code>false</code>, <code>0</code> and the empty text.
+<code>{...}</code> is only computed inside a <code>&lt;Widget&gt;</code>, a <code>&lt;Repeat&gt;</code> or a
+<code>&lt;ForEach&gt;</code>: elsewhere braces are ordinary characters.</p>
+
+<h2 id="reload">14. Files that are loaded again</h2>
+
+<p>What is created from a file (<code><a href="reference.html#Rwindow_create_from_xml_file">Rwindow_create_from_xml_file</a></code>,
+<code><a href="reference.html#Rwidget_create_from_xml_file">Rwidget_create_from_xml_file</a></code>, the files they include, the files of
+<code><a href="reference.html#Rxml_register_widgets_from_file">Rxml_register_widgets_from_file</a></code>, the theme files, the CSV tables) is watched
+while the application runs. Save the file in any editor and the interface
+follows:</p>
+<ul>
+<li>an element still in the file keeps its widget: its handle, its callbacks, what was typed, scrolled or selected; only the attributes that changed are set again;</li>
+<li>elements are matched by <code>Name</code>, else by content, else by position among those of the same tag; new ones are built, those that are gone are deleted;</li>
+<li>a widget that manages its own content (<code>ComboBox</code>, <code>Timeline</code>, <code>NodeGraph</code>, menus...) is built again when what is inside it changes;</li>
+<li>a file with a mistake changes nothing and the error is reported.</li>
+</ul>
+
+<pre>static void on_reload(const char* path, int ok, void* user) {
+    if (ok) g_status = <a href="reference.html#Rwidget_find">Rwidget_find</a>(g_window, "status");   /* widgets built again have new handles */
+}
+<a href="reference.html#Rxml_set_reload_callback">Rxml_set_reload_callback</a>(on_reload, NULL);
+<a href="reference.html#Rxml_set_live_reload">Rxml_set_live_reload</a>(<a href="reference.html#R_FALSE">R_FALSE</a>);       /* a shipped application; or RAVEN_LIVE_RELOAD=0 */
+<a href="reference.html#Rxml_check_files">Rxml_check_files</a>();                  /* look now (else five times a second) */</pre>
+
+<h2 id="bycode">15. Tags made by code; WebView</h2>
+
+<pre>static Rid make_gauge(const char* tag, void* user) {
+    Rid gauge = <a href="reference.html#Rwidget_create">Rwidget_create</a>(<a href="reference.html#R_WIDGET_CUSTOM">R_WIDGET_CUSTOM</a>);
+    <a href="reference.html#Rcustom_set_paint_callback">Rcustom_set_paint_callback</a>(gauge, paint_gauge, NULL);
+    return gauge;
+}
+
+static int gauge_attribute(Rid widget, const char* name, const char* value, void* user) {
+    if (strcmp(name, "Level") != 0) return <a href="reference.html#R_FALSE">R_FALSE</a>;   /* not mine: Name, Width, Slot... are left to Raven */
+    set_level(widget, (float)atof(value));
+    return <a href="reference.html#R_TRUE">R_TRUE</a>;
+}
+
+<a href="reference.html#Rxml_register_tag">Rxml_register_tag</a>("Gauge", make_gauge, gauge_attribute, NULL);
+/* then, in any document:  &lt;Gauge Level="0.7" Width="120" Height="24"/&gt; */</pre>
+
+<p><code><a href="reference.html#Rxml_resolve_path">Rxml_resolve_path</a></code> gives the path of a file named in the document being
+loaded; <code><a href="reference.html#Rwidget_set_destroy_callback">Rwidget_set_destroy_callback</a></code> tells when the widget is gone.
+<code>&lt;WebView&gt;</code> of <code>raven_web.h</code> is such a tag, registered by
+<code><a href="reference.html#Rweb_register_xml">Rweb_register_xml</a></code>:</p>
+
+<pre>&lt;WebView Name="docs" Url="https://example.org" Slot.Fill="1" OnChanged="docs.navigated"/&gt;
+&lt;WebView Source="pages/help.html" Zoom="1.25"/&gt;
+&lt;WebView Frames="Jpeg" Quality="80"&gt;&lt;![CDATA[&lt;h1&gt;Hello&lt;/h1&gt;&lt;p&gt;From &lt;b&gt;HTML&lt;/b&gt;.&lt;/p&gt;]]&gt;&lt;/WebView&gt;</pre>
+
+<div class="tw"><table>
+<tr><th>WebView attribute</th><th></th></tr>
+<tr><td><code>Url</code></td><td>an address</td></tr>
+<tr><td><code>Source</code></td><td>a file, relative to the document</td></tr>
+<tr><td><code>Html</code>, or the text of the element</td><td>HTML</td></tr>
+<tr><td><code>Zoom</code></td><td>the size of the content</td></tr>
+<tr><td><code>Frames</code>, <code>Quality</code></td><td><code>Png</code> or <code>Jpeg</code>; 1..100</td></tr>
+<tr><td><code>OnChanged</code></td><td>fired when the address changes</td></tr>
+</table></div>
+
+<h2 id="documents">16. Documents, for tools</h2>
+
+<p><code><a href="reference.html#Rxml_document_parse">Rxml_document_parse</a></code> reads a text into a tree of nodes that can be
+changed, written back with its comments (<code><a href="reference.html#Rxml_document_to_string">Rxml_document_to_string</a></code>) and
+built (<code><a href="reference.html#Rxml_document_create_widget">Rxml_document_create_widget</a></code>, <code><a href="reference.html#Rxml_document_create_window">Rxml_document_create_window</a></code>). A widget
+built from a document knows its node (<code><a href="reference.html#Rwidget_get_xml_node">Rwidget_get_xml_node</a></code>), and a node its
+widget (<code><a href="reference.html#Rxml_node_get_widget">Rxml_node_get_widget</a></code>). <code><a href="reference.html#Rxml_get_tag_count">Rxml_get_tag_count</a></code>, <code><a href="reference.html#Rxml_get_tag_name">Rxml_get_tag_name</a></code>,
+<code><a href="reference.html#Rxml_get_attribute_count">Rxml_get_attribute_count</a></code> and <code><a href="reference.html#Rxml_get_attribute_info">Rxml_get_attribute_info</a></code> list the tags and
+their attributes: the tables of this page as data. The designer is built on these
+functions.</p>
+
+<pre><a href="reference.html#RXmlError">RXmlError</a> error;
+Rid doc = <a href="reference.html#Rxml_document_parse">Rxml_document_parse</a>(text, strlen(text), &amp;error);
+if (doc == <a href="reference.html#R_INVALID_ID">R_INVALID_ID</a>) {
+    printf("line %d, column %d: %s\n", error.line, error.column, error.message);
+} else {
+    Rid root = <a href="reference.html#Rxml_document_get_root">Rxml_document_get_root</a>(doc);
+    Rid button = <a href="reference.html#Rxml_node_add_child">Rxml_node_add_child</a>(root, "Button", -1);      /* at the end */
+    <a href="reference.html#Rxml_node_set_attribute">Rxml_node_set_attribute</a>(button, "Text", "Added");
+    Rid preview = <a href="reference.html#Rxml_document_create_widget">Rxml_document_create_widget</a>(doc);
+    puts(<a href="reference.html#Rxml_document_to_string">Rxml_document_to_string</a>(doc));
+    <a href="reference.html#Rxml_document_destroy">Rxml_document_destroy</a>(doc);                                /* what was built lives on */
+}
+
+/* every attribute of a tag, as the loader knows it */
+int i, n = <a href="reference.html#Rxml_get_attribute_count">Rxml_get_attribute_count</a>("Button");
+for (i = 0; i &lt; n; i++) {
+    <a href="reference.html#RXmlAttributeInfo">RXmlAttributeInfo</a> info;
+    <a href="reference.html#Rxml_get_attribute_info">Rxml_get_attribute_info</a>("Button", i, &amp;info);
+    printf("%-20s %s\n", info.name, info.description);
+}</pre>
+
+<p class="foot">Raven 0.1 &mdash; Apache License 2.0 &mdash; <a href="index.html">raven home</a> &middot; <a href="https://github.com/oscar-soirey/Raven">source</a></p>
+<div class="pager"><a class="prev" href="guide.html"><small>previous</small>Guide</a><a class="next" href="designer.html"><small>next</small>Designer</a></div>
+</article></main>
+</div>
+<script src="docs.js"></script>
+
+</body>
+</html>
